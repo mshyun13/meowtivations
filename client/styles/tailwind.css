@@ -1,0 +1,250 @@
+@import '@radix-ui/colors/black-alpha.css';
+@import '@radix-ui/colors/green.css';
+@import '@radix-ui/colors/mauve.css';
+@import '@radix-ui/colors/violet.css';
+
+/* Tailwind Directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Modern CSS Reset */
+@layer base {
+  /* Base styles and CSS variables */
+  :root {
+    /* Meowtivation-themed palette */
+    --background: 210, 50%, 98%;
+    --foreground: 215, 25%, 27%;
+
+    --muted: 154, 25%, 95%;
+    --muted-foreground: 220, 14%, 46%;
+
+    --popover: 210, 50%, 98%;
+    --popover-foreground: 215, 25%, 27%;
+
+    --card: 0, 0%, 100%;
+    --card-foreground: 215, 25%, 27%;
+
+    --border: 220, 13%, 91%;
+    --input: 220, 13%, 91%;
+
+    /* Meowtivation-themed primary - Teal/Aqua */
+    --primary: 175, 74%, 37%; /* #14b89a - bright teal */
+    --primary-foreground: 0, 0%, 100%;
+
+    /* Meowtivation-themed secondary - Coral Orange */
+    --secondary: 14, 89%, 65%; /* #f58c59 - coral */
+    --secondary-foreground: 0, 0%, 100%;
+
+    /* Meowtivation-themed accent - Playful Yellow */
+    --accent: 43, 96%, 58%; /* #f5c22b - sunflower yellow */
+    --accent-foreground: 215, 25%, 27%;
+
+    /* Meowtivation-themed destructive - Bright Red */
+    --destructive: 0, 84%, 60%;
+    --destructive-foreground: 0, 0%, 100%;
+
+    --ring: 175, 74%, 37%;
+
+    --radius: 0.75rem;
+
+    /* Meowtivation-themed palette */
+    --meowtivation-blue: #4fc3f7; /* Sky blue */
+    --meowtivation-green: #66bb6a; /* Grass green */
+    --meowtivation-orange: #ff9e80; /* Soft orange */
+    --meowtivation-pink: #f48fb1; /* Soft pink */
+    --meowtivation-purple: #b39ddb; /* Lavender */
+    --meowtivation-red: #ef5350; /* Cherry red */
+    --meowtivation-yellow: #ffee58; /* Sunshine yellow */
+    --meowtivation-brown: #8d6e63; /* Dog brown */
+    --meowtivation-cream: #fff8e1; /* Cat cream */
+  }
+
+  .dark {
+    /* Dark meowtivation-themed background - Deep blue night */
+    --background: 215, 28%, 17%;
+    --foreground: 210, 40%, 98%;
+
+    --muted: 215, 27%, 25%;
+    --muted-foreground: 217, 15%, 83%;
+
+    --popover: 215, 28%, 17%;
+    --popover-foreground: 210, 40%, 98%;
+
+    --card: 215, 30%, 22%;
+    --card-foreground: 210, 40%, 98%;
+
+    --border: 216, 34%, 30%;
+    --input: 216, 34%, 30%;
+
+    /* Dark mode primary - Moonlight Teal */
+    --primary: 175, 70%, 41%;
+    --primary-foreground: 0, 0%, 100%;
+
+    /* Dark mode secondary - Deep Coral */
+    --secondary: 14, 70%, 50%;
+    --secondary-foreground: 0, 0%, 100%;
+
+    /* Dark mode accent - Gold */
+    --accent: 43, 90%, 50%;
+    --accent-foreground: 0, 0%, 0%;
+
+    /* Dark mode destructive - Bright Red */
+    --destructive: 0, 84%, 60%;
+    --destructive-foreground: 0, 0%, 100%;
+
+    --ring: 175, 74%, 37%;
+
+    --radius: 0.75rem;
+  }
+
+  /* Modern CSS Reset */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    @apply border-border;
+  }
+
+  /* Remove default margin and padding */
+  html,
+  body,
+  div,
+  span,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  blockquote,
+  pre,
+  a,
+  abbr,
+  address,
+  cite,
+  code,
+  del,
+  dfn,
+  em,
+  img,
+  ins,
+  kbd,
+  q,
+  s,
+  samp,
+  small,
+  strong,
+  sub,
+  sup,
+  var,
+  b,
+  i,
+  dl,
+  dt,
+  dd,
+  ol,
+  ul,
+  li,
+  fieldset,
+  form,
+  label,
+  legend,
+  input,
+  textarea,
+  table,
+  caption,
+  tbody,
+  tfoot,
+  thead,
+  tr,
+  th,
+  td,
+  article,
+  aside,
+  canvas,
+  details,
+  figcaption,
+  figure,
+  footer,
+  header,
+  menu,
+  nav,
+  section,
+  summary,
+  time,
+  mark,
+  audio,
+  video {
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Set core body defaults */
+  body {
+    min-height: 100vh;
+    text-rendering: optimizeSpeed;
+    @apply bg-background text-foreground;
+    font-feature-settings:
+      'rlig' 1,
+      'calt' 1;
+  }
+
+  /* Make images easier to work with */
+  img,
+  picture {
+    max-width: 100%;
+    display: block;
+  }
+
+  /* Improve form element UX */
+  input,
+  button,
+  textarea,
+  select {
+    font: inherit;
+  }
+}
+
+/* Component Classes */
+@layer components {
+  /* Card component */
+  .card {
+    @apply rounded-lg border border-border bg-card p-4 shadow-sm;
+  }
+
+  /* Button component */
+  .btn {
+    @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors 
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 
+           ring-offset-background;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/90;
+  }
+
+  /* Input component */
+  .input {
+    @apply flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm 
+           file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground 
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 
+           disabled:cursor-not-allowed disabled:opacity-50;
+  }
+}
+
+/* Utility Classes */
+@layer utilities {
+  .gradient-p-to-y {
+    background-image: linear-gradient(225deg, #e4b781, #ffb86c);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}
