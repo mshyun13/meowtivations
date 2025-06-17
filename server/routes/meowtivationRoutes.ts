@@ -42,15 +42,14 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const { title, imageUrl, quote, user_id } = req.body
-
     const newMeowtivation = {
       title: title,
       imageUrl: imageUrl,
       quote: quote,
       user_id: user_id,
     }
-    await db.createMeowtivation(req.body)
-    res.status(201)
+    const result = await db.createMeowtivation(newMeowtivation)
+    res.status(201).json({ result }) //Making it an object might be bad, note if crap hits the fan.
   } catch (error) {
     console.error('Chicken jockey ' + error)
     res.status(500)
