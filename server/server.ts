@@ -9,7 +9,7 @@ server.use(express.json())
 server.use(express.urlencoded({ extended: false }))
 
 server.use('/api/v1/meowtivations', meowtivationRoutes)
-server.use('/api/v1/upload', uploadRoutes)
+server.use('/api/v1/images/upload', uploadRoutes)
 
 if (process.env.NODE_ENV === 'production') {
   server.use(express.static(Path.resolve('public')))
