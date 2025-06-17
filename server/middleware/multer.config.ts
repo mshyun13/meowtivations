@@ -24,7 +24,7 @@ const storage = new CloudinaryStorage({
       // 2. Remove the file extension (e.g. "my_photo")
       const nameWithoutExtension = originalFileName
         .split('.')
-        .slice(0, -1)
+        .slice(0, -1) // -1 starts from the end of the array
         .join('.')
 
       // 3. Sanitize the filename to be URL-friendly: replace non-alphanumeric characters (except hyphens) with hyphens, and converts to lowercase.
@@ -39,8 +39,8 @@ const storage = new CloudinaryStorage({
       // publicId = `${sanitizedName}-${timestamp}`
 
       // option to include user info later:
-      const userId = req.user?.id || '1' // req.user.id needs to be present (check this later)
-      publicId = `user${userId}-${sanitizedName}-${timestamp}`
+      const username = req.user?.username || 'user1' // req.user.username needs to be present (check this later)
+      publicId = `user-${username}-${sanitizedName}-${timestamp}`
     } else {
       // if no originalname, prompt warning and create a unique default
       console.warn(
