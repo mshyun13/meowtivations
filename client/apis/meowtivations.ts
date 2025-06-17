@@ -20,7 +20,6 @@ export async function getMeowtivationById(id: number): Promise<Meowtivation> {
   throw new Error('Not implemented yet')
 }
 
-// TODO: To be implemented
 export async function createMeowtivation(
   meowtivation: MeowtivationData,
 ): Promise<Meowtivation> {

@@ -1,31 +1,21 @@
 import PageTitle from '@/components/PageTitle'
+import { useCreateMeowtivation } from '@/hooks/useCreateMeowtivation'
 import { MeowtivationData } from '@models/meowtivation.ts'
-import { title } from 'node:process'
 import { useState } from 'react'
-
-// Initial state based on database fields
-const initialState: MeowtivationData = {
-  imageUrl: '',
-  quoteText: '',
-  quoteAuthor: '',
-  title: '',
-  userId: '',
-  isPublic: true,
-}
 
 const images = ['1', '2', '3', '4', '5']
 
 const quotes = [
-  { title: 'Nothing selected', subText: "You shouldn't be seeting this" },
-  { title: 'Nothing selected 2', subText: "You shouldn't be seeting this 2" },
-  { title: 'Nothing selected 3', subText: "You shouldn't be seeting this 3" },
-  { title: 'Nothing selected 4', subText: "You shouldn't be seeting this 4" },
-  { title: 'Nothing selected 5', subText: "You shouldn't be seeting this 5" },
+  { title: 'Nothing selected', text: "You shouldn't be seeting this" },
+  { title: 'Nothing selected 2', text: "You shouldn't be seeting this 2" },
+  { title: 'Nothing selected 3', text: "You shouldn't be seeting this 3" },
+  { title: 'Nothing selected 4', text: "You shouldn't be seeting this 4" },
+  { title: 'Nothing selected 5', text: "You shouldn't be seeting this 5" },
 ]
 
 interface Quote {
   title: string
-  subText: string
+  text: string
 }
 
 export default function Create() {
@@ -33,12 +23,26 @@ export default function Create() {
   const [selectedQuote, setSelectedQuote] = useState<Quote | null>(null)
   const [error, setError] = useState('')
 
+  const mutation = useCreateMeowtivation()
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault
     if (!selectedImage || !selectedQuote) {
-      setError('Select Image')
+      setError('Select Image and Quote')
       return
     }
+    const newMeowtivation: MeowtivationData = {
+      userId: 1,
+      imageUrl: selectedImage,
+      title: selectedQuote.title,
+      quoteText: selectedQuote.text,
+    }
+
+    mutation.mutate(newMeowtivation)
+
+    setSelectedImage('')
+    setSelectedQuote(null)
+    setError('')
   }
 
   return (
@@ -83,7 +87,7 @@ export default function Create() {
                   >
                     <p className="font-semibold">{quote.title}</p>
                     <p className="text-sm text-muted-foreground">
-                      {quote.subText}
+                      {quote.text}
                     </p>
                   </button>
                 ))}
