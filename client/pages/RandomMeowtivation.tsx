@@ -33,7 +33,9 @@ function RandomMeowtivation() {
       </div>
       {/* refresh button */}
       <div className='flex gap-4 justify-center mt-6'>
-        <Button onClick={handleGetAnother}>Get Another</Button>
+        <Button onClick={handleGetAnother} >
+          Get Another
+        </Button>
       </div>
     </>
   )
