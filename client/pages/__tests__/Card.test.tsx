@@ -21,15 +21,15 @@ describe('<Card />', () => {
   it('renders title, quote, and author', () => {
     render(<Card meowtivation={mockMeowtivation} onClick={() => {}} />)
 
-    expect(screen.getByText(/Stay Pawsitive/i)).toBeInTheDocument()
-    expect(screen.getByText(/You can do it!/i)).toBeInTheDocument()
-    expect(screen.getByText(/Whiskers/i)).toBeInTheDocument()
+    expect(screen.getByText(/stay pawsitive/i)).toBeInTheDocument()
+    expect(screen.getByText(/you can do it/i)).toBeInTheDocument()
+    expect(screen.getByText(/whiskers/i)).toBeInTheDocument()
   })
 
   it('renders the image with correct src', () => {
     render(<Card meowtivation={mockMeowtivation} onClick={() => {}} />)
 
-    const images = screen.getAllByAltText('Meowtivational cat')
-    expect(images[0]).toHaveAttribute('src', mockMeowtivation.imageUrl)
+    const [image] = screen.getAllByAltText(/meowtivational cat/i)
+    expect(image).toHaveAttribute('src', mockMeowtivation.imageUrl)
   })
 })
