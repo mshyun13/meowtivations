@@ -35,43 +35,75 @@ export default function Create() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault
-    if (!selectedImage) {
+    if (!selectedImage || !selectedQuote) {
       setError('Select Image')
       return
     }
   }
+
   return (
     <>
       <div>
-        <PageTitle title="Meowtivate" />
+        <PageTitle title="Create Meowtivation!" />
         <div className="text-center p-8">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Choose Image */}
             <div>
-              <h2>Choose image</h2>
+              <h2 className="mb-4 mt-2 font-title text-4xl font-bold tracking-wide text-primary text-left">
+                Choose image
+              </h2>
               {images.map((cat) => (
                 <button
                   key={cat}
                   type="button"
                   onClick={() => setSelectedImage(cat)}
-                  className={`border-4 rounded ${selectedImage === cat ? 'border-green' : 'border-black-5'}`}
+                  className={`border-4 rounded m-1 ${selectedImage === cat ? 'border-primary' : 'border-border'}`}
                 >
-                  <img src={cat} alt={`funny cat haha ${cat}`} />
+                  <img
+                    src={cat}
+                    alt={`funny cat haha ${cat}`}
+                    className="h-32 w-auto"
+                  />
                 </button>
               ))}
             </div>
+            {/* Choose Quote */}
+
             <div>
-              <h2>Choose quote</h2>
-              {quotes.map((quote) => (
-                <button
-                  key={quote.title}
-                  type="button"
-                  onClick={() => setSelectedQuote(quote)}
-                  className={`border-4 rounded ${selectedQuote === quote ? 'border-green' : 'border-black-5'}`}
-                >
-                  <p>{quote.title}</p>
-                  <p>{quote.subText}</p>
-                </button>
-              ))}
+              <h2 className="mb-4 mt-2 font-title text-4xl font-bold tracking-wide text-primary text-left">
+                Choose quote
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {quotes.map((quote) => (
+                  <button
+                    key={quote.title}
+                    type="button"
+                    onClick={() => setSelectedQuote(quote)}
+                    className={`border-4 rounded p-2 m-1 w-full text-left ${selectedQuote?.title === quote.title ? 'border-primary' : 'border-border'}`}
+                  >
+                    <p className="font-semibold">{quote.title}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {quote.subText}
+                    </p>
+                  </button>
+                ))}
+              </div>
+            </div>
+            {/* Submit Button */}
+            <div className="flex gap-4 mt-4 justify-centre">
+              <button type="submit" className="btn btn-primary">
+                Create Meowtivation
+              </button>
+              <button
+                type="submit"
+                className="btn btn-secondary"
+                onClick={() => {
+                  setSelectedImage('')
+                  setSelectedQuote(null)
+                }}
+              >
+                Clear
+              </button>
             </div>
           </form>
         </div>
