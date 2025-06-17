@@ -8,6 +8,9 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Fragment } from 'react'
 import { Link } from 'react-router'
 
+// import LoginButton
+import LoginButton from '../LoginButton'
+
 const links = [
   { name: 'Random', to: '/random' },
   { name: 'Gallery', to: '/gallery' },
@@ -71,6 +74,11 @@ export default function Navigation() {
             <span className="mr-5 text-sm text-white font-medium lg:text-lg lg:leading-none">
               Welcome Meowtivation Seeker!
             </span>
+          </div>
+
+          {/* LoginButton */}
+          <div>
+            <LoginButton />
           </div>
         </div>
       </div>
