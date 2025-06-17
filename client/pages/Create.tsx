@@ -94,13 +94,16 @@ export default function Create() {
               </div>
             </div>
             {/* Submit Button */}
-            <div className="flex gap-4 mt-4 justify-centre">
-              <button type="submit" className="btn btn-primary">
+            <div className="flex gap-4 mt-6 justify-center">
+              <button
+                type="submit"
+                className="btn btn-primary px-8 py-4 text-white font-semibold rounded-xl shadow"
+              >
                 Create Meowtivation
               </button>
               <button
                 type="submit"
-                className="btn btn-secondary"
+                className="btn btn-secondary px-8 py-4 text-white font-semibold rounded- shadow"
                 onClick={() => {
                   setSelectedImage('')
                   setSelectedQuote(null)
