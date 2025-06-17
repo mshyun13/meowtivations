@@ -9,10 +9,10 @@ const router = express.Router()
 router.get('/random', async (req, res) => {
   try {
     const meowtivation = await db.getRandomMeowtivation()
-    
+
     if (!meowtivation) {
       return res.status(StatusCodes.NOT_FOUND).json({
-        error: 'No meowtivations found'
+        error: 'No meowtivations found',
       })
     }
 
@@ -20,7 +20,7 @@ router.get('/random', async (req, res) => {
   } catch (error) {
     console.error('Error fetching random meowtivation:', error)
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-      error: 'Failed to fetch random meowtivation'
+      error: 'Failed to fetch random meowtivation',
     })
   }
 })
@@ -39,11 +39,22 @@ router.get('/:id', async (req, res) => {
   res.status(StatusCodes.NOT_IMPLEMENTED).json({ error: 'Not implemented yet' })
 })
 
-// TODO: Students to implement
-// POST /api/v1/meowtivations - create new meowtivation
 router.post('/', async (req, res) => {
-  // Implement: Create new meowtivation with validation
-  res.status(StatusCodes.NOT_IMPLEMENTED).json({ error: 'Not implemented yet' })
+  try {
+    const { title, imageUrl, quote, user_id } = req.body
+
+    const newMeowtivation = {
+      title: title,
+      imageUrl: imageUrl,
+      quote: quote,
+      user_id: user_id,
+    }
+    await db.createMeowtivation(req.body)
+    res.status(201)
+  } catch (error) {
+    console.error('Chicken jockey ' + error)
+    res.status(500)
+  }
 })
 
 // TODO: Students to implement
