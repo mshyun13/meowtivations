@@ -24,8 +24,9 @@ export async function getMeowtivationById(id: number): Promise<Meowtivation> {
 export async function createMeowtivation(
   meowtivation: MeowtivationData,
 ): Promise<Meowtivation> {
-  // Implement: POST to /meowtivations endpoint
-  throw new Error('Not implemented yet')
+  const response = (await request.post(`${rootUrl}/meowtivations}`)).send(
+    meowtivation,
+  )
 }
 
 // TODO: To be implemented
