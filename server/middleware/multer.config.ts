@@ -52,7 +52,7 @@ const storage = new CloudinaryStorage({
 
     return {
       folder: 'uploads',
-      allowed_formats: ['jpg', 'png', 'jpeg', 'webp', 'mp4'],
+      allowed_formats: ['jpg', 'png', 'jpeg', 'webp'],
       transformation: [{ width: 1000, crop: 'limit', fetch_format: 'auto' }],
       resource_type: 'auto',
       public_id: publicId,
@@ -61,6 +61,24 @@ const storage = new CloudinaryStorage({
   },
 })
 
-const upload = multer({ storage })
+// File type validation here (look into client side validation as well)
+const upload = multer({
+  storage,
+  limits: { fileSize: 10 * 1024 * 1024 }, // limits file size to 10 MB
+  fileFilter: (req, file, cb) => {
+    const allowedMimeTypes = [
+      'image/jpeg',
+      'image/png',
+      'image/webp',
+      'video/mp4',
+    ]
+
+    if (allowedMimeTypes.includes(file.mimetype)) {
+      cb(null, true) // Accept file
+    } else {
+      cb(new Error('Unsupported file type. Allowed types: jpg, png, webp, mp4')) // Reject file
+    }
+  },
+})
 
 export default upload
