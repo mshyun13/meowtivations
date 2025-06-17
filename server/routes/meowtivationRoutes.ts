@@ -45,8 +45,8 @@ router.post('/', async (req, res) => {
     const newMeowtivation = {
       title: title,
       imageUrl: imageUrl,
-      quote: quote,
-      user_id: user_id,
+      quoteText: quote,
+      userId: user_id,
     }
     const result = await db.createMeowtivation(newMeowtivation)
     res.status(201).json({ result }) //Making it an object might be bad, note if crap hits the fan.
