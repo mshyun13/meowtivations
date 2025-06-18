@@ -4,7 +4,9 @@ import { StatusCodes } from 'http-status-codes'
 import * as db from '../db/functions/meowtivations.ts'
 
 const router = express.Router()
-
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max)
+}
 // GET /api/v1/meowtivations/random
 router.get('/random', async (req, res) => {
   try {
@@ -25,9 +27,17 @@ router.get('/random', async (req, res) => {
   }
 })
 
-router.get('/', async (req, res) => {
+router.get('/:filter', async (req, res) => {
   try {
-    const meowtivations = await db.getAllMeowtivations()
+    const filter = req.params.filter
+    let meowtivations = 'error'
+    if (filter === 'popularSort') {
+      meowtivations = await db.getAllMeowtivations('popular')
+    } else if (filter === 'randomSort') {
+      meowtivations = await db.getAllMeowtivations('random')
+    } else {
+      meowtivations = await db.getAllMeowtivations()
+    }
     res.status(200).json(meowtivations)
   } catch (error) {
     console.error('Could not grab all meowtivations. ' + error)

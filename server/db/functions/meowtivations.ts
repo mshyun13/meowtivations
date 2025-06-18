@@ -3,6 +3,10 @@ import { Meowtivation, MeowtivationData } from '../../../models/meowtivation.ts'
 
 const db = connection
 
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max)
+}
+
 export async function getRandomMeowtivation(): Promise<
   Meowtivation | undefined
 > {
@@ -26,9 +30,14 @@ export async function getRandomMeowtivation(): Promise<
   return meowtivation as Meowtivation | undefined
 }
 
-// TODO:
-export async function getAllMeowtivations(): Promise<Meowtivation[]> {
-  return db('meowtivations').orderBy('created_at')
+export async function getAllMeowtivations(sort?: string) {
+  if (sort === 'popular') {
+    return db('meowtivations').orderBy('likes_count')
+  } else if (sort === 'random') {
+    return db('meowtivations').orderByRaw('RANDOM()')
+  } else {
+    return db('meowtivations').orderBy('created_at')
+  }
 }
 
 // TODO:
