@@ -27,7 +27,7 @@ router.get('/random', async (req, res) => {
   }
 })
 
-router.get('/:filter', async (req, res) => {
+router.get('/:filter?', async (req, res) => {
   try {
     const filter = req.params.filter
     let meowtivations = 'error'

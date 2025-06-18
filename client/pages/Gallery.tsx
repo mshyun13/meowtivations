@@ -12,9 +12,14 @@ export default function Gallery() {
   useEffect(() => {
     async function fetchData() {
       setLoading(true)
-      const data = await getAllMeowtivations(sort)
-      setMeowtivations(data)
-      setLoading(false)
+      try {
+        const data = await getAllMeowtivations(sort)
+        setMeowtivations(data)
+      } catch (err) {
+        console.error('Failed to fetch meowtivations:', err)
+      } finally {
+        setLoading(false)
+      }
     }
     fetchData()
   }, [sort])
@@ -37,20 +42,22 @@ export default function Gallery() {
           <option value="popular">Popular</option>
           <option value="random">Random</option>
         </select>
-
         {/* Gallery Grid */}
-        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-          {meowtivations.length === 0 ? (
-            <p className="col-span-full text-gray-500">No meowtivations yet.</p>
-          ) : (
-            meowtivations.map((m) => (
+        {loading ? (
+          <p>Loading...</p>
+        ) : !meowtivations || meowtivations.length === 0 ? (
+          <p className="col-span-full text-gray-500">No meowtivations yet.</p>
+        ) : (
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+            {meowtivations.map((m) => (
               <Card
                 key={m.id ?? `${m.userId}-${m.createdAt}`}
                 meowtivation={m}
               />
-            ))
-          )}
-        </div>
+            ))}
+          </div>
+        )}
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3"></div>
       </div>
     </div>
   )

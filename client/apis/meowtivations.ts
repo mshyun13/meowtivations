@@ -7,15 +7,10 @@ export async function getRandomMeowtivation(): Promise<Meowtivation> {
   return response.body as Meowtivation
 }
 
-// TODO: To be implemented
 export async function getAllMeowtivations(
   sort: 'recent' | 'popular' | 'random' = 'recent',
-  limit = 9,
-  offset = 0,
 ): Promise<Meowtivation[]> {
-  const res = await request
-    .get(`${rootUrl}/meowtivations`)
-    .query({ sort, limit, offset })
+  const res = await request.get(`${rootUrl}/meowtivations`).query({ sort })
   return res.body.meowtivations
 }
 
