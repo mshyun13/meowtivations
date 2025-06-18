@@ -25,11 +25,14 @@ router.get('/random', async (req, res) => {
   }
 })
 
-// TODO: Students to implement
-// GET /api/v1/meowtivations - get all meowtivations
 router.get('/', async (req, res) => {
-  // Implement: Get all public meowtivations with pagination
-  res.status(StatusCodes.NOT_IMPLEMENTED).json({ error: 'Not implemented yet' })
+  try {
+    const meowtivations = await db.getAllMeowtivations()
+    res.status(200).json(meowtivations)
+  } catch (error) {
+    console.error('Could not grab all meowtivations. ' + error)
+    res.status(500)
+  }
 })
 
 // TODO: Students to implement
