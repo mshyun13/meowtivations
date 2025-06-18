@@ -9,6 +9,8 @@ import NotFound from '@/pages/NotFound'
 import Create from '@/pages/Create'
 import Profile from '@/pages/Profile'
 
+import Registration from './pages/Registration'
+
 export const routes = createRoutesFromElements(
   <Route path="/" element={<App />}>
     <Route index element={<Home />} />
@@ -17,6 +19,7 @@ export const routes = createRoutesFromElements(
     <Route path="/random" element={<Random />} />
     <Route path="/gallery" element={<Gallery />} />
     <Route path="/create" element={<Create />} />
+    <Route path="/registration" element={<Registration />} />
     <Route path="*" element={<NotFound />} />
   </Route>,
 )
