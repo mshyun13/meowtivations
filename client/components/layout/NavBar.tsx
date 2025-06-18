@@ -70,12 +70,6 @@ export default function Navigation() {
           </ul>
 
           {/* DESKTOP */}
-          <div className="hidden items-center md:flex md:flex-row">
-            <span className="mr-5 text-sm text-white font-medium lg:text-lg lg:leading-none">
-              Welcome Meowtivation Seeker!
-            </span>
-          </div>
-
           {/* LoginButton */}
           <div>
             <LoginButton />
