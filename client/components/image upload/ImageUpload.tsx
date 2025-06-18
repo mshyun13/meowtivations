@@ -4,6 +4,18 @@ import Dropzone from './Dropzone'
 import useUploadImage from '@/hooks/use-image-upload'
 import useGetUserUploads from '@/hooks/use-get-user-uploads'
 
+import { Swiper, SwiperSlide } from 'swiper/react'
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
+import {
+  FreeMode,
+  Mousewheel,
+  Navigation,
+  Pagination,
+  Scrollbar,
+} from 'swiper/modules'
+
 export default function ImageUpload() {
   const [preview, setPreview] = useState<null | string>(null)
   const [file, setFile] = useState<File | null>(null)
@@ -42,23 +54,35 @@ export default function ImageUpload() {
   console.log(images)
 
   return (
-    <div className="relative parent flex max-w-7xl h-80 bg-white rounded-lg shadow-xl border">
-      <div className="w-96">
+    <div className="flex max-w-7xl h-80 bg-white rounded-lg shadow-xl border">
+      <div className="w-[660px]">
         <h3 className="font-title p-5 py-3 text-4xl text-left">
           Uploaded Images
         </h3>
-        <div>
-          {images.map((image) => (
-            <img
-              key={image.id}
-              src={image.image_url}
-              alt={`User's upload ${image.id}`}
-            />
+        <Swiper
+          modules={[FreeMode, Mousewheel, Navigation, Pagination, Scrollbar]}
+          spaceBetween={10}
+          slidesPerView={2}
+          navigation={true}
+          grabCursor={true}
+          freeMode={true}
+          pagination={{ clickable: true }}
+          mousewheel={true}
+          className="relative w-[600px] h-64 rounded "
+        >
+          {images.reverse().map((image) => (
+            <SwiperSlide key={image.id}>
+              <img
+                src={image.image_url}
+                alt={`User's upload ${image.id}`}
+                className="object-contain w-full h-full rounded -translate-y-8"
+              />
+            </SwiperSlide>
           ))}
-        </div>
+        </Swiper>
       </div>
 
-      <div className="relative child right-0 mr-4 my-2 border-l pl-4 ml-auto">
+      <div className="w-100 right-0 mr-4 my-2 border-l pl-4">
         <div className="h-1/2">
           <p className="font-semibold">Upload preview:</p>
           {preview ? (

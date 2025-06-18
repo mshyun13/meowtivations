@@ -42,7 +42,8 @@
     "multer-storage-cloudinary": "^4.0.0",
     "react-dropzone": "^14.3.8",
     "sqlite3": "^5.1.7",
-    "superagent": "^10.2.1"
+    "superagent": "^10.2.1",
+    "swiper": "^11.2.8"
   },
   "devDependencies": {
     "@auth0/auth0-react": "^2.2.4",
