@@ -29,6 +29,7 @@ export default function Create() {
     e.preventDefault()
     if (!selectedImage || !selectedQuote) {
       setError('Select Image and Quote')
+      alert('Please select both an image and a quote before submitting')
       return
     }
     const newMeowtivation: MeowtivationData = {
@@ -102,11 +103,12 @@ export default function Create() {
                 Create Meowtivation
               </button>
               <button
-                type="submit"
+                type="button"
                 className="btn btn-secondary px-8 py-4 text-white font-semibold rounded- shadow"
                 onClick={() => {
                   setSelectedImage('')
                   setSelectedQuote(null)
+                  setError('')
                 }}
               >
                 Clear
