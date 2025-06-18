@@ -3,6 +3,8 @@ import { Meowtivation, MeowtivationData } from '../../../models/meowtivation.ts'
 import request from 'superagent'
 import { ImageSuggestion } from '../../../models/meowtivation.ts'
 
+import 'dotenv/config'
+
 const db = connection
 
 export async function getRandomMeowtivation(): Promise<
@@ -74,7 +76,7 @@ export async function fetchRandomCatImage(): Promise<ImageSuggestion> {
 
 export async function fetchFIVECatImages(): Promise<ImageSuggestion> {
   const response = await request.get(
-    ` https://api.thecatapi.com/v1/images/search?limit=5api_key=${process.env.CAT_API_KEY}`,
+    `https://api.thecatapi.com/v1/images/search?limit=5&api_key=${process.env.CAT_API_KEY}`,
   )
   return response.body as ImageSuggestion
 }

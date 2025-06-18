@@ -28,10 +28,9 @@ router.get('/random', async (req, res) => {
   }
 })
 //CALLING THE API
-router.get('/', async (req, res) => {
+router.get('/images', async (req, res) => {
   try {
     const kitty = await db.fetchRandomCatImage()
-    console.log(kitty)
     res.json(kitty)
   } catch (err) {
     if (err instanceof Error) {
@@ -42,10 +41,9 @@ router.get('/', async (req, res) => {
 })
 
 //CALLING 5 IMAGES
-router.get('/', async (req, res) => {
+router.get('/images/random', async (req, res) => {
   try {
     const kitties = await db.fetchFIVECatImages()
-    console.log(kitties)
     res.json(kitties)
   } catch (err) {
     if (err instanceof Error) {
