@@ -2,12 +2,17 @@ import { useState } from 'react'
 import { Button } from '../Button'
 import Dropzone from './Dropzone'
 import useUploadImage from '@/hooks/use-image-upload'
-import { UploadStream } from 'cloudinary'
+import useGetUserUploads from '@/hooks/use-get-user-uploads'
 
 export default function ImageUpload() {
   const [preview, setPreview] = useState<null | string>(null)
   const [file, setFile] = useState<File | null>(null)
   const mutation = useUploadImage()
+
+  const { data: images, isPending, error } = useGetUserUploads()
+
+  if (isPending) return <p>Loading...</p>
+  if (error) return <p>Error loading past uploads</p>
 
   const handlePreview = (file: File) => {
     if (!file) {
@@ -34,13 +39,23 @@ export default function ImageUpload() {
     }
   }
 
+  console.log(images)
+
   return (
     <div className="relative parent flex max-w-7xl h-80 bg-white rounded-lg shadow-xl border">
       <div className="w-96">
         <h3 className="font-title p-5 py-3 text-4xl text-left">
           Uploaded Images
         </h3>
-        <div>{/* diplay user uploads here */}</div>
+        <div>
+          {images.map((image) => (
+            <img
+              key={image.id}
+              src={image.image_url}
+              alt={`User's upload ${image.id}`}
+            />
+          ))}
+        </div>
       </div>
 
       <div className="relative child right-0 mr-4 my-2 border-l pl-4 ml-auto">
