@@ -26,7 +26,7 @@ export default function Create() {
   const mutation = useCreateMeowtivation()
 
   function handleSubmit(e: React.FormEvent) {
-    e.preventDefault
+    e.preventDefault()
     if (!selectedImage || !selectedQuote) {
       setError('Select Image and Quote')
       return
