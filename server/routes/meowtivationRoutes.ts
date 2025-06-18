@@ -67,11 +67,14 @@ router.get('/:id', async (req, res) => {
   res.status(StatusCodes.NOT_IMPLEMENTED).json({ error: 'Not implemented yet' })
 })
 
-// TODO: Students to implement
-// POST /api/v1/meowtivations - create new meowtivation
 router.post('/', async (req, res) => {
-  // Implement: Create new meowtivation with validation
-  res.status(StatusCodes.NOT_IMPLEMENTED).json({ error: 'Not implemented yet' })
+  try {
+    const result = await db.createMeowtivation(req.body)
+    res.status(201).json({ result }) //Making it an object might be bad, note if crap hits the fan.
+  } catch (error) {
+    console.error('Chicken jockey ' + error)
+    res.status(500)
+  }
 })
 
 // TODO: Students to implement

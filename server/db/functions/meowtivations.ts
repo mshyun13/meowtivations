@@ -11,17 +11,16 @@ export async function getRandomMeowtivation(): Promise<
   Meowtivation | undefined
 > {
   const meowtivation = await db('meowtivations')
-    .where('is_public', true)
+    .join('users', 'users.id', 'meowtivations.user_id')
     .orderByRaw('RANDOM()')
     .select(
-      'id',
+      'meowtivations.id',
       'image_url as imageUrl',
       'quote_text as quoteText',
-      'quote_author as quoteAuthor',
+      'users.username as quoteAuthor',
       'title',
       'user_id as userId',
       'likes_count as likesCount',
-      'is_public as isPublic',
       'created_at as createdAt',
       'updated_at as updatedAt',
     )
@@ -49,7 +48,23 @@ export async function createMeowtivation(
   meowtivation: MeowtivationData,
 ): Promise<Meowtivation> {
   // Implement: Create a new meowtivation and return it with generated ID and timestamps
-  throw new Error('Not implemented yet')
+  return db('meowtivations')
+    .insert({
+      image_url: meowtivation.imageUrl,
+      quote_text: meowtivation.quoteText,
+      title: meowtivation.title,
+      user_id: meowtivation.userId,
+    })
+    .returning([
+      'id',
+      'image_url as imageURL',
+      'quote_text as quoteText',
+      'title',
+      'user_id as userId',
+      'likes_count as likesCount',
+      'created_at as createdAt',
+      'updated_at as updatedAt',
+    ])
 }
 
 // TODO:
