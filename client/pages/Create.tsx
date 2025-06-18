@@ -2,6 +2,7 @@ import PageTitle from '@/components/PageTitle'
 import { useCreateMeowtivation } from '@/hooks/useCreateMeowtivation'
 import { MeowtivationData } from '@models/meowtivation.ts'
 import { useState } from 'react'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 
 const images = ['1', '2', '3', '4', '5']
 
@@ -51,6 +52,14 @@ export default function Create() {
         <PageTitle title="Create Meowtivation!" />
         <div className="text-center p-8">
           <form onSubmit={handleSubmit} className="space-y-4">
+            {error && (
+              <div className="max-w-xl mx-auto my-4">
+                <Alert variant="destructive">
+                  <AlertTitle>Oops!</AlertTitle>
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              </div>
+            )}
             {/* Choose Image */}
             <div>
               <h2 className="mb-4 mt-2 font-title text-4xl font-bold tracking-wide text-primary text-left">
@@ -102,11 +111,12 @@ export default function Create() {
                 Create Meowtivation
               </button>
               <button
-                type="submit"
+                type="button"
                 className="btn btn-secondary px-8 py-4 text-white font-semibold rounded- shadow"
                 onClick={() => {
                   setSelectedImage('')
                   setSelectedQuote(null)
+                  setError('')
                 }}
               >
                 Clear
