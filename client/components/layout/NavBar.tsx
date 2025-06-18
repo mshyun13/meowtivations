@@ -10,11 +10,11 @@ import { Link } from 'react-router'
 
 // import LoginButton
 import LoginButton from '../LoginButton'
+import { IfAuthenticated } from '../Authenticated'
 
 const links = [
   { name: 'Random', to: '/random' },
   { name: 'Gallery', to: '/gallery' },
-  { name: 'Create', to: '/create' },
 ]
 
 export default function Navigation() {
@@ -64,9 +64,14 @@ export default function Navigation() {
                 <DesktopLink to={link.to}>{link.name}</DesktopLink>
               </li>
             ))}
-            <li key={'users'}>
-              <DesktopLink to={'/users/user1'}>Example User</DesktopLink>
-            </li>
+            <IfAuthenticated>
+              <li key={'create'}>
+                <DesktopLink to={'/create'}>Create</DesktopLink>
+              </li>
+              <li key={'users'}>
+                <DesktopLink to={'/profile'}>My Profile</DesktopLink>
+              </li>
+            </IfAuthenticated>
           </ul>
 
           {/* DESKTOP */}
@@ -133,15 +138,26 @@ export function MobileNavigation() {
               </Popover.Button>
             </li>
           ))}
-          <li key={'users'}>
-            <Popover.Button
-              as={Link}
-              to={'/users/user1'}
-              className="rounded text-base text-secondary font-medium hover:bg-slate-300 hover:text-slate-600"
-            >
-              Example User
-            </Popover.Button>
-          </li>
+          <IfAuthenticated>
+            <li key={'create'}>
+              <Popover.Button
+                as={Link}
+                to={'/create'}
+                className="rounded text-base text-secondary font-medium hover:bg-slate-300 hover:text-slate-600"
+              >
+                Create
+              </Popover.Button>
+            </li>
+            <li key={'users'}>
+              <Popover.Button
+                as={Link}
+                to={'/profile'}
+                className="rounded text-base text-secondary font-medium hover:bg-slate-300 hover:text-slate-600"
+              >
+                My Profile
+              </Popover.Button>
+            </li>
+          </IfAuthenticated>
         </ul>
       </div>
     </div>
