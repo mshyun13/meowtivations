@@ -15,6 +15,7 @@ import {
   Pagination,
   Scrollbar,
 } from 'swiper/modules'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 export default function ImageUpload() {
   const [preview, setPreview] = useState<null | string>(null)
@@ -55,7 +56,8 @@ export default function ImageUpload() {
 
   return (
     <div className="flex max-w-7xl h-80 bg-white rounded-lg shadow-xl border">
-      <div className="w-[660px]">
+      {/* display uploaded images */}
+      <div className="w-[660px] relative">
         <h3 className="font-title p-5 py-3 text-4xl text-left">
           Uploaded Images
         </h3>
@@ -63,12 +65,15 @@ export default function ImageUpload() {
           modules={[FreeMode, Mousewheel, Navigation, Pagination, Scrollbar]}
           spaceBetween={10}
           slidesPerView={2}
-          navigation={true}
+          navigation={{
+            nextEl: '.custom-next',
+            prevEl: '.custom-prev',
+          }}
           grabCursor={true}
           freeMode={true}
           pagination={{ clickable: true }}
           mousewheel={true}
-          className="relative w-[600px] h-64 rounded "
+          className="relative w-[600px] h-64 rounded"
         >
           {images.reverse().map((image) => (
             <SwiperSlide key={image.id}>
@@ -80,8 +85,15 @@ export default function ImageUpload() {
             </SwiperSlide>
           ))}
         </Swiper>
+        <button className="custom-prev absolute top-1/2 -left-3 z-10 transform -translate-y-1/2">
+          <ChevronLeft className="text-black" size={50} />
+        </button>
+        <button className="custom-next absolute top-1/2 -right-3 z-10 transform -translate-y-1/2">
+          <ChevronRight className="text-black" size={50} />
+        </button>
       </div>
 
+      {/* select images for preview and upload  */}
       <div className="w-100 right-0 mr-4 my-2 border-l pl-4">
         <div className="h-1/2">
           <p className="font-semibold">Upload preview:</p>
@@ -92,9 +104,7 @@ export default function ImageUpload() {
               className="max-h-28 translate-y-1 mx-auto"
             />
           ) : (
-            <p className="translate-y-12 italic">
-              select your meows image 🐱👇
-            </p>
+            <p className="translate-y-12 italic">select your image 🐱👇</p>
           )}
         </div>
 
