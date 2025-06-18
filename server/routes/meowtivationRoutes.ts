@@ -1,7 +1,10 @@
 import express from 'express'
 import { StatusCodes } from 'http-status-codes'
 
+import request from 'superagent'
+
 import * as db from '../db/functions/meowtivations.ts'
+import { ImageSuggestion } from '@models/meowtivation.ts'
 
 const router = express.Router()
 
@@ -9,10 +12,10 @@ const router = express.Router()
 router.get('/random', async (req, res) => {
   try {
     const meowtivation = await db.getRandomMeowtivation()
-    
+
     if (!meowtivation) {
       return res.status(StatusCodes.NOT_FOUND).json({
-        error: 'No meowtivations found'
+        error: 'No meowtivations found',
       })
     }
 
@@ -20,8 +23,35 @@ router.get('/random', async (req, res) => {
   } catch (error) {
     console.error('Error fetching random meowtivation:', error)
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-      error: 'Failed to fetch random meowtivation'
+      error: 'Failed to fetch random meowtivation',
     })
+  }
+})
+//CALLING THE API
+router.get('/', async (req, res) => {
+  try {
+    const kitty = await db.fetchRandomCatImage()
+    console.log(kitty)
+    res.json(kitty)
+  } catch (err) {
+    if (err instanceof Error) {
+      res.status(500).send((err as Error).message)
+      console.log('FAILED TO CALL THE_CAT_API')
+    }
+  }
+})
+
+//CALLING 5 IMAGES
+router.get('/', async (req, res) => {
+  try {
+    const kitties = await db.fetchFIVECatImages()
+    console.log(kitties)
+    res.json(kitties)
+  } catch (err) {
+    if (err instanceof Error) {
+      res.status(500).send((err as Error).message)
+      console.log('FAILED TO CALL 5 CAT IMAGES')
+    }
   }
 })
 
