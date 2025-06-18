@@ -3,8 +3,8 @@ import { useCreateMeowtivation } from '@/hooks/useCreateMeowtivation'
 import { MeowtivationData } from '@models/meowtivation.ts'
 import { useState } from 'react'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-
-const images = ['1', '2', '3', '4', '5']
+import { useQuery } from '@tanstack/react-query'
+import { getRandomImages } from '@/apis/suggestions'
 
 const quotes = [
   { title: 'Nothing selected', text: "You shouldn't be seeting this" },
@@ -23,6 +23,12 @@ export default function Create() {
   const [selectedImage, setSelectedImage] = useState('')
   const [selectedQuote, setSelectedQuote] = useState<Quote | null>(null)
   const [error, setError] = useState('')
+
+  const { data: images, ...imageSuggestions } = useQuery({
+    queryKey: ['imageSuggestions'],
+    queryFn: getRandomImages,
+    refetchOnWindowFocus: false,
+  })
 
   const mutation = useCreateMeowtivation()
 
@@ -44,6 +50,11 @@ export default function Create() {
     setSelectedImage('')
     setSelectedQuote(null)
     setError('')
+    imageSuggestions.refetch()
+  }
+
+  if (imageSuggestions.error) {
+    return <>Unable to load images</>
   }
 
   return (
@@ -61,25 +72,31 @@ export default function Create() {
               </div>
             )}
             {/* Choose Image */}
+
             <div>
               <h2 className="mb-4 mt-2 font-title text-4xl font-bold tracking-wide text-primary text-left">
                 Choose image
               </h2>
-              {images.map((cat) => (
-                <button
-                  key={cat}
-                  type="button"
-                  onClick={() => setSelectedImage(cat)}
-                  className={`border-4 rounded m-1 ${selectedImage === cat ? 'border-primary' : 'border-border'}`}
-                >
-                  <img
-                    src={cat}
-                    alt={`funny cat haha ${cat}`}
-                    className="h-32 w-auto"
-                  />
-                </button>
-              ))}
+              {imageSuggestions.isPending || !images ? (
+                <p>loading...</p>
+              ) : (
+                images.map((cat) => (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => setSelectedImage(cat.url)}
+                    className={`border-4 rounded m-1 ${selectedImage === cat.url ? 'border-primary' : 'border-border'}`}
+                  >
+                    <img
+                      src={cat.url}
+                      alt={`funny cat haha ${cat}`}
+                      className="h-32 w-auto"
+                    />
+                  </button>
+                ))
+              )}
             </div>
+
             {/* Choose Quote */}
 
             <div>
