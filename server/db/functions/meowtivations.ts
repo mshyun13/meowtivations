@@ -66,7 +66,7 @@ export async function deleteMeowtivation(id: number): Promise<boolean> {
 export async function toggleLike(
   meowtivationId: number,
   userId: number
-): Promise<void> {
+): Promise<number> {
   const existingLike = await db('likes')
   .where({ meowtivation_id: meowtivationId, user_id: userId })
   .first()
@@ -83,7 +83,7 @@ export async function toggleLike(
   } else {
     //like
     await db('likes').insert({
-      Meowtivation_id: meowtivationId,
+      meowtivation_id: meowtivationId,
       user_id: userId,
     })
     
@@ -91,4 +91,10 @@ export async function toggleLike(
     .where({ id: meowtivationId })
     .increment('likes_count', 1)
   }
+  const updated = await db('meowtivations')
+  .where({ id: meowtivationId })
+  .select('likes_count')
+  .first()
+
+  return updated.likes_count
 }

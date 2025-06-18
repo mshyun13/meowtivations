@@ -61,8 +61,8 @@ router.patch('/:id/like', async (req, res) => {
   }
   try {
     const userId = 1 // Temporary hardcoded user ID
-    await db.toggleLike(meowtivationId, userId)
-    res.status(StatusCodes.OK).json({ message: 'Toggled like successfully' })
+    const updatedLikes = await db.toggleLike(meowtivationId, userId)
+    res.status(StatusCodes.OK).json({ likesCount: updatedLikes })
   } catch (error) {
     console.error('Error toggling like:', error)
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Failed to toggle like' })
