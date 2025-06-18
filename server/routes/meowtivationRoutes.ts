@@ -53,6 +53,22 @@ router.put('/:id', async (req, res) => {
   res.status(StatusCodes.NOT_IMPLEMENTED).json({ error: 'Not implemented yet' })
 })
 
+router.patch('/:id/like', async (req, res) => {
+  const meowtivationId = Number(req.params.id)
+
+  if (isNaN(meowtivationId)) {
+    return res.status(StatusCodes.BAD_REQUEST).json({ error: 'Invalid meowtivation ID' })
+  }
+  try {
+    const userId = 1 // Temporary hardcoded user ID
+    await db.toggleLike(meowtivationId, userId)
+    res.status(StatusCodes.OK).json({ message: 'Toggled like successfully' })
+  } catch (error) {
+    console.error('Error toggling like:', error)
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Failed to toggle like' })
+  }
+})
+
 // TODO: Students to implement
 // DELETE /api/v1/meowtivations/:id - delete meowtivation
 router.delete('/:id', async (req, res) => {

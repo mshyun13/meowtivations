@@ -1,5 +1,6 @@
 import connection from '../connection.ts'
 import { Meowtivation, MeowtivationData } from '../../../models/meowtivation.ts'
+import Meowtivation from '@/pages/Meowtivation.tsx'
 
 const db = connection
 
@@ -61,4 +62,34 @@ export async function updateMeowtivation(
 export async function deleteMeowtivation(id: number): Promise<boolean> {
   // Implement: Delete a meowtivation and return true if successful
   throw new Error('Not implemented yet')
+}
+
+export async function toggleLike(
+  meowtivationId: number,
+  userId: number
+): Promise<void> {
+  const existingLike = await db('likes')
+  .where({ meowtivation_id: meowtivationId, user_id: userId })
+  .first()
+
+  if (existingLike) {
+    //Unlike
+    await db('likes')
+    .where({ meowtivation_id: meowtivationId, user_id: userId })
+    .delete()
+
+    await db('meowtivations')
+    .where({ id: meowtivationId })
+    .decrement('likes_count', 1)
+  } else {
+    //like
+    await db('likes').insert({
+      Meowtivation_id: meowtivationId,
+      user_id: userId,
+    })
+    
+    await db('meowtivations')
+    .where({ id: meowtivationId })
+    .increment('likes_count', 1)
+  }
 }
