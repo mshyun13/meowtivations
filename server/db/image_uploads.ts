@@ -14,6 +14,6 @@ export async function uploadImageToDb(upload: {
     .returning('id')
 }
 
-export async function getUserUploads(user_id: string) {
+export async function getUserUploads(user_id: number) {
   return await connection('image_uploads').where({ user_id }).select('*')
 }

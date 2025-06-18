@@ -1,6 +1,6 @@
-import express from 'express'
+import express, { json } from 'express'
 import upload from '../middleware/multer.config'
-import { uploadImageToDb } from '../db/image_uploads'
+import { getUserUploads, uploadImageToDb } from '../db/image_uploads'
 
 const router = express.Router()
 
@@ -18,7 +18,7 @@ router.post('/', upload.single('image'), async (req, res) => {
     await uploadImageToDb({
       user_id: mockUserId,
       image_URL: req.file.path, // Cloudinary URL
-      caption: req.body.caption || '',
+      caption: req.body.caption || null,
     })
 
     res.json({
@@ -29,6 +29,18 @@ router.post('/', upload.single('image'), async (req, res) => {
   } catch (err) {
     console.error('Upload failed:', err)
     res.status(500).send('Upload failed: internal server error')
+  }
+})
+
+router.get('/', async (req, res) => {
+  const id = mockUserId // change later
+
+  try {
+    const userUploads = await getUserUploads(id)
+    return res.json(userUploads)
+  } catch (err) {
+    console.error(err)
+    res.status(500).send('Request failed: internal server error')
   }
 })
 
