@@ -7,17 +7,16 @@ export async function getRandomMeowtivation(): Promise<
   Meowtivation | undefined
 > {
   const meowtivation = await db('meowtivations')
-    .where('is_public', true)
+    .join('users', 'users.id', 'meowtivations.user_id')
     .orderByRaw('RANDOM()')
     .select(
-      'id',
+      'meowtivations.id',
       'image_url as imageUrl',
       'quote_text as quoteText',
-      'quote_author as quoteAuthor',
+      'users.username as quoteAuthor',
       'title',
       'user_id as userId',
       'likes_count as likesCount',
-      'is_public as isPublic',
       'created_at as createdAt',
       'updated_at as updatedAt',
     )
