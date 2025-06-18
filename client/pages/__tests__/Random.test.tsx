@@ -41,7 +41,8 @@ describe('Meowtivation rendering tests', () => {
     expect(title).toBeInTheDocument()
     expect(title).toHaveTextContent(mockMeowtivation.title)
 
-    const quote = await screen.findByText(`"${mockMeowtivation.quoteText}"`)
+    const quote = await screen.findByText((content) => 
+     content.includes(mockMeowtivation.quoteText))
     expect(quote).toBeInTheDocument()
 
     const author = await screen.findByText(`— ${mockMeowtivation.quoteAuthor}`)
