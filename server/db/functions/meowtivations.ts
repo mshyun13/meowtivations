@@ -1,6 +1,5 @@
 import connection from '../connection.ts'
 import { Meowtivation, MeowtivationData } from '../../../models/meowtivation.ts'
-import Meowtivation from '@/pages/Meowtivation.tsx'
 
 const db = connection
 
