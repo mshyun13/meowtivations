@@ -2,6 +2,7 @@ import express from 'express'
 import { StatusCodes } from 'http-status-codes'
 
 import * as db from '../db/functions/meowtivations.ts'
+import { Meowtivation } from '@models/meowtivation.ts'
 
 const router = express.Router()
 function getRandomInt(max) {
@@ -30,13 +31,13 @@ router.get('/random', async (req, res) => {
 router.get('/:filter?', async (req, res) => {
   try {
     const filter = req.params.filter
-    let meowtivations = 'error'
-    if (filter === 'popularSort') {
+    let meowtivations: Meowtivation[] = []]
+    if (filter === 'popular') {
       meowtivations = await db.getAllMeowtivations('popular')
-    } else if (filter === 'randomSort') {
+    } else if (filter === 'random') {
       meowtivations = await db.getAllMeowtivations('random')
     } else {
-      meowtivations = await db.getAllMeowtivations()
+      meowtivations = await db.getAllMeowtivations('recent')
     }
     res.status(200).json(meowtivations)
   } catch (error) {
