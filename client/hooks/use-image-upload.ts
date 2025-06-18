@@ -1,18 +1,19 @@
-import { useMutation } from '@tanstack/react-query'
-import { useNavigate } from 'react-router'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import request from 'superagent'
 
 const rootURL = new URL(`/api/v1`, document.baseURI)
 
 export default function useUploadImage() {
-  const navigate = useNavigate()
+  const qc = useQueryClient()
 
   return useMutation({
-    mutationFn: async (data) => {
-      await request.post(`${rootURL}/images/upload`).send(data)
+    mutationFn: async (file: File) => {
+      const formData = new FormData()
+      formData.append('image', file) // this is where it ties into "upload.single('image')" in server-side uploadRoutes.ts
+      await request.post(`${rootURL}/images/upload`).send(formData)
     },
     onSuccess: async () => {
-      navigate('/gallery') // change later if needed
+      qc.invalidateQueries({ queryKey: ['userUploads'] })
     },
     onError: (err) => {
       console.error('Upload failed:', err)

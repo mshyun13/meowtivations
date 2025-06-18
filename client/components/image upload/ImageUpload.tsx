@@ -1,9 +1,13 @@
 import { useState } from 'react'
 import { Button } from '../Button'
 import Dropzone from './Dropzone'
+import useUploadImage from '@/hooks/use-image-upload'
+import { UploadStream } from 'cloudinary'
 
 export default function ImageUpload() {
   const [preview, setPreview] = useState<null | string>(null)
+  const [file, setFile] = useState<File | null>(null)
+  const mutation = useUploadImage()
 
   const handlePreview = (file: File) => {
     if (!file) {
@@ -11,11 +15,24 @@ export default function ImageUpload() {
       return
     }
 
+    setFile(file)
     const previewURL = URL.createObjectURL(file)
     setPreview(previewURL)
   }
 
-  const handleUpload = () => {}
+  const handleUpload = async (event: React.MouseEvent) => {
+    event.preventDefault()
+
+    if (!file) return alert('Please select an image to upload')
+
+    try {
+      await mutation.mutateAsync(file)
+      setPreview(null)
+      setFile(null)
+    } catch (err) {
+      console.error('Upload failed:', err)
+    }
+  }
 
   return (
     <div className="relative parent flex max-w-7xl h-80 bg-white rounded-lg shadow-xl border">
@@ -26,7 +43,7 @@ export default function ImageUpload() {
         <div>{/* diplay user uploads here */}</div>
       </div>
 
-      <div className="relative child right-0 flex-column mr-4 my-2 border-l pl-4 max-w-sm ml-auto">
+      <div className="relative child right-0 mr-4 my-2 border-l pl-4 ml-auto">
         <div className="h-1/2">
           <p className="font-semibold">Upload preview:</p>
           {preview ? (
@@ -36,10 +53,20 @@ export default function ImageUpload() {
               className="max-h-28 translate-y-1 mx-auto"
             />
           ) : (
-            <p className="translate-y-8 italic">No preview available</p>
+            <p className="translate-y-12 italic">
+              select your meows image 🐱👇
+            </p>
           )}
         </div>
-        <Dropzone onUpload={handlePreview} />
+
+        <div className="min-w-80 min-h-24 flex items-center justify-center">
+          {mutation.isPending ? (
+            <p className="font-semibold mb-2 text-center">Uploading…</p>
+          ) : (
+            <Dropzone onUpload={handlePreview} />
+          )}
+        </div>
+
         <Button onClick={handleUpload}>Upload</Button>
       </div>
     </div>
