@@ -13,3 +13,7 @@ export async function uploadImageToDb(upload: {
     })
     .returning('id')
 }
+
+export async function getUserUploads(user_id: string) {
+  return await connection('image_uploads').where({ user_id }).select('*')
+}
