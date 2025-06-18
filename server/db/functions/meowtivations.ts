@@ -28,8 +28,7 @@ export async function getRandomMeowtivation(): Promise<
 
 // TODO:
 export async function getAllMeowtivations(): Promise<Meowtivation[]> {
-  // Implement: Get all public meowtivations, ordered by created_at DESC
-  throw new Error('Not implemented yet')
+  return db('meowtivations').orderBy('created_at')
 }
 
 // TODO:
@@ -40,11 +39,9 @@ export async function getMeowtivationById(
   throw new Error('Not implemented yet')
 }
 
-// TODO:
 export async function createMeowtivation(
   meowtivation: MeowtivationData,
 ): Promise<Meowtivation> {
-  // Implement: Create a new meowtivation and return it with generated ID and timestamps
   return db('meowtivations')
     .insert({
       image_url: meowtivation.imageUrl,
