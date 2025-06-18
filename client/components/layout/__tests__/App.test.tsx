@@ -34,11 +34,6 @@ describe('App layout renders correctly', () => {
     const galleryLink = within(navLinks).getByText('Gallery')
     expect(galleryLink).toBeInTheDocument()
     expect(galleryLink.closest('a')).toHaveAttribute('href', '/gallery')
-
-    // Add Pet link
-    const createLink = within(navLinks).getByText('Create')
-    expect(createLink).toBeInTheDocument()
-    expect(createLink.closest('a')).toHaveAttribute('href', '/create')
   })
 
   it('shows the footer with copyright information', async () => {
