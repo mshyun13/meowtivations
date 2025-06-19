@@ -32,7 +32,7 @@ router.get('/', async (req, res) => {
   res.status(StatusCodes.NOT_IMPLEMENTED).json({ error: 'Not implemented yet' })
 })
 
-// TODO: Students to implement
+
 // GET /api/v1/meowtivations/:id/comments - get specific meowtivation
 router.get('/:id/comments', async (req, res) => {
    try {
@@ -57,11 +57,25 @@ router.get('/:id/comments', async (req, res) => {
   }
 })
 
+// // POST /api/v1/meowtivations/:id/comments - post new comments 
+
+// router.get('/:id/comments'), async (req, res) => {
+//   try{
+//     const id=Number(req.params.id)
+//     const {user}
+//   }catch(error){
+
+//   }
+// }
+
+
+
 // GET /api/v1/meowtivations/:id - get specific meowtivation
 router.get('/:id', async (req, res) => {
   // Implement: Get meowtivation by ID with proper error handling
   res.status(StatusCodes.NOT_IMPLEMENTED).json({ error: 'Not implemented yet' })
 })
+
 // TODO: Students to implement
 // POST /api/v1/meowtivations - create new meowtivation
 router.post('/', async (req, res) => {

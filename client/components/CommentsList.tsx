@@ -24,14 +24,26 @@ function CommentsList({ id }: Props) {
   }
 
   return (
-    <>
+    <div className="space-y-2">
+      <div className="flex  items-center gap-2 ">
+        <input
+          type="text"
+          placeholder="Love it!"
+          className="flex-1 px-3 py-2 border border-gray-400 rounded focus:outline-none focus:ring-2 focus:ring-gray-400"
+        />
+        <button className="btn btn-primary w-24 px-4 py-2 text-white rounded">
+          Add
+        </button>
+      </div>
       {comments.map((comment) => (
-        <p key={comment.id}>
-          {' '}
+        <div
+          key={comment.id}
+          className="w-full px-3 py-2 border border-gray-400 rounded focus:outline-none focus:ring-2 focus:ring-gray-400"
+        >
           {comment.userId}: {comment.comment}
-        </p>
+        </div>
       ))}
-    </>
+    </div>
   )
 }
 
