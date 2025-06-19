@@ -17,7 +17,12 @@ import {
 } from 'swiper/modules'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
-export default function ImageUpload({ selectedImage, setSelectedImage }) {
+interface Prop {
+  selectedImage: string
+  setSelectedImage: (image_url: string) => void
+}
+
+export default function ImageUpload({ selectedImage, setSelectedImage }: Prop) {
   const [preview, setPreview] = useState<null | string>(null)
   const [file, setFile] = useState<File | null>(null)
   const mutation = useUploadImage()
