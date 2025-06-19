@@ -52,3 +52,8 @@ export interface UserData {
 export interface User extends UserData {
   id: number
 }
+export interface newUser {
+  username: string
+  email: string
+  avatar_url: string
+}

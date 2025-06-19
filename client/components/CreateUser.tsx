@@ -1,4 +1,8 @@
 import { useState } from 'react'
+import { useAuth0 } from '@auth0/auth0-react'
+import { useUser } from '../hooks/useUser'
+import { Button } from './Button'
+import { useNavigate } from 'react-router'
 
 const newUserData = {
   username: '',
@@ -8,6 +12,9 @@ const newUserData = {
 
 export default function CreateUser() {
   const [newUser, setNewUser] = useState(newUserData)
+  const { getAccessTokenSilently } = useAuth0()
+  const user = useUser()
+  const navigate = useNavigate()
 
   const {
     username: newUsername,
@@ -21,34 +28,55 @@ export default function CreateUser() {
       ...newUser,
       [id]: value,
     })
-    console.log(newUser)
+  }
+
+  const handleSubmit = async (evt: React.FormEvent<HTMLFormElement>) => {
+    const token = await getAccessTokenSilently()
+    evt.preventDefault()
+    user.add.mutate({ newUser, token })
+    navigate('/')
   }
 
   return (
-    <>
-      <form>
-        <label>Username: </label>
+    <div className="justify-items-center bg-gray-200 rounded-2xl">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col w-96 justify-center"
+      >
+        <label htmlFor="username" className="text-center p-8 -m-4">
+          Username:{' '}
+        </label>
         <input
           type="text"
           id="username"
           value={newUsername}
           onChange={handleChange}
+          className="border-green border-2"
         />
-        <label>Email: </label>
+        <label htmlFor="email" className="text-center p-8 -m-4">
+          Email:{' '}
+        </label>
         <input
           type="text"
-          id="username"
+          id="email"
           value={newEmail}
           onChange={handleChange}
+          className="border-green border-2"
         />
-        <label>Avatar URL: </label>
+        <label htmlFor="avatar_url" className="text-center p-8 -m-4">
+          Avatar URL:{' '}
+        </label>
         <input
           type="text"
-          id="username"
+          id="avatar_url"
           value={newAvatar_url}
           onChange={handleChange}
+          className="border-green border-2"
         />
+        <br />
+        <Button type="submit">Submit New User</Button>
+        <br />
       </form>
-    </>
+    </div>
   )
 }

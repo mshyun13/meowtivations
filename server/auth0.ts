@@ -4,7 +4,7 @@ import { ParamsDictionary } from 'express-serve-static-core'
 import { JwtPayload } from 'jsonwebtoken'
 import jwks from 'jwks-rsa'
 
-const domain = 'kahikatea-2025-eric.au.auth0.com'
+const domain = 'https://kahikatea-2025-eric.au.auth0.com'
 const audience = 'https://meows/api'
 
 const checkJwt = jwt({

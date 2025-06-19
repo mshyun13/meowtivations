@@ -19,7 +19,7 @@ export const routes = createRoutesFromElements(
     <Route path="/random" element={<Random />} />
     <Route path="/gallery" element={<Gallery />} />
     <Route path="/create" element={<Create />} />
-    <Route path="/registration" element={<Registration />} />
+    <Route path="/register" element={<Registration />} />
     <Route path="*" element={<NotFound />} />
   </Route>,
 )
