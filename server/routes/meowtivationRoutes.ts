@@ -9,10 +9,10 @@ const router = express.Router()
 router.get('/random', async (req, res) => {
   try {
     const meowtivation = await db.getRandomMeowtivation()
-    
+
     if (!meowtivation) {
       return res.status(StatusCodes.NOT_FOUND).json({
-        error: 'No meowtivations found'
+        error: 'No meowtivations found',
       })
     }
 
@@ -20,7 +20,7 @@ router.get('/random', async (req, res) => {
   } catch (error) {
     console.error('Error fetching random meowtivation:', error)
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-      error: 'Failed to fetch random meowtivation'
+      error: 'Failed to fetch random meowtivation',
     })
   }
 })
@@ -32,13 +32,12 @@ router.get('/', async (req, res) => {
   res.status(StatusCodes.NOT_IMPLEMENTED).json({ error: 'Not implemented yet' })
 })
 
-
 // GET /api/v1/meowtivations/:id/comments - get specific meowtivation
 router.get('/:id/comments', async (req, res) => {
-   try {
+  try {
     const id = Number(req.params.id) // can't convert 'a' to a number but we can convert '1' to 1
     const comments = await db.getCommentsByMeowtivationId(id)
-    if(!comments){
+    if (!comments) {
       res.status(400)
       return
     }
@@ -57,18 +56,28 @@ router.get('/:id/comments', async (req, res) => {
   }
 })
 
-// // POST /api/v1/meowtivations/:id/comments - post new comments 
+// POST /api/v1/meowtivations/:id/comments - post new comments
 
-// router.get('/:id/comments'), async (req, res) => {
-//   try{
-//     const id=Number(req.params.id)
-//     const {user}
-//   }catch(error){
+router.post('/:id/comments'),
+  async (req, res) => {
+    try {
+      const id = Number(req.params.id)
+      const { userId, comment } = req.body
 
-//   }
-// }
-
-
+      const newComment = { meowtivationId: id, userId, comment }
+      const savedComment = await db.addComment(newComment)
+      res.status(201).json(savedComment)
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.message)
+      } else {
+        console.error('unknown error')
+      }
+      res.status(500).json({
+        error: `Something went wrong.`,
+      })
+    }
+  }
 
 // GET /api/v1/meowtivations/:id - get specific meowtivation
 router.get('/:id', async (req, res) => {

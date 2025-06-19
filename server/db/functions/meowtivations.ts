@@ -83,3 +83,15 @@ export async function getCommentsByMeowtivationId(
   return comments 
 }
 
+export async function addComment(
+  comment: number,
+) {
+  const [newComment] = await db('comments')
+    .insert(comment)
+    .returning(['id', 'meowtivationId', 'userId', 'comment' ])
+  
+
+  return newComment 
+}
+
+
