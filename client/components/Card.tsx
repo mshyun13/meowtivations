@@ -1,5 +1,7 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useMutation } from '@tanstack/react-query'
 import { Meowtivation } from '@models/meowtivation'
+import { patchLike } from '@/apis/patchLike'
 
 interface Props {
   meowtivation: Meowtivation
@@ -16,15 +18,21 @@ export default function Card({ meowtivation, onClick }: Props) {
     setLiked(false)
   }, [meowtivation])
 
-  async function handleLike() {
-    try {
-      const newLiked = !liked
-      setLiked(newLiked)
-      setLikes((prev) => prev + (newLiked ? 1 : -1))
-  } catch (error) {
-    console.error('Failed to like:', error)
+  const mutation = useMutation({ 
+    mutationFn: () => patchLike(meowtivation.id),
+    onSuccess: (updatedLikes: number) => {
+      setLiked((prev) => !prev)
+      setLikes(updatedLikes)
+    },
+    onError: (error) => {
+      console.error('Like update failed:', error)
+    },
+  })
+
+  function handleLike(e: React.MouseEvent) {
+    e.stopPropagation()
+    mutation.mutate()
   }
-}
 
   return (
     <div
@@ -56,9 +64,7 @@ export default function Card({ meowtivation, onClick }: Props) {
     {/* Like button */}
     <div className='mt-4 flex items-center justify-center gap-2'>
       <button 
-      onClick={(e) => {
-        e.stopPropagation() 
-        handleLike() }}
+      onClick={handleLike}
       className={`text-2xl transition-transform duration-200 ${liked ? 'scale-125' : ''}`}
        aria-label="like-button"
        type='button'>
