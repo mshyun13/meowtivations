@@ -33,12 +33,35 @@ router.get('/', async (req, res) => {
 })
 
 // TODO: Students to implement
+// GET /api/v1/meowtivations/:id/comments - get specific meowtivation
+router.get('/:id/comments', async (req, res) => {
+   try {
+    const id = Number(req.params.id) // can't convert 'a' to a number but we can convert '1' to 1
+    const comments = await db.getCommentsByMeowtivationId(id)
+    if(!comments){
+      res.status(400)
+      return
+    }
+
+    // ...
+    res.status(200).json(comments)
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message)
+    } else {
+      console.error('unknown error')
+    }
+    res.status(500).json({
+      error: `Something went wrong.`,
+    })
+  }
+})
+
 // GET /api/v1/meowtivations/:id - get specific meowtivation
 router.get('/:id', async (req, res) => {
   // Implement: Get meowtivation by ID with proper error handling
   res.status(StatusCodes.NOT_IMPLEMENTED).json({ error: 'Not implemented yet' })
 })
-
 // TODO: Students to implement
 // POST /api/v1/meowtivations - create new meowtivation
 router.post('/', async (req, res) => {

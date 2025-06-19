@@ -62,3 +62,24 @@ export async function deleteMeowtivation(id: number): Promise<boolean> {
   // Implement: Delete a meowtivation and return true if successful
   throw new Error('Not implemented yet')
 }
+
+export async function getCommentsByMeowtivationId(
+  id: number,
+): Promise<Comment[]| undefined> {
+  const comments = await db('comments')
+    .where('meowtivation_id', id)
+    
+    .select(
+      'id',
+      'meowtivation_id as meowtivationId',
+      'user_id as userId',
+      'comment',
+      
+      'created_at as createdAt',
+      'updated_at as updatedAt',
+    )
+  
+
+  return comments 
+}
+
