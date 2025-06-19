@@ -82,6 +82,42 @@ export async function deleteMeowtivation(id: number): Promise<boolean> {
   throw new Error('Not implemented yet')
 }
 
+export async function toggleLike(
+  meowtivationId: number,
+  userId: number,
+): Promise<number> {
+  const existingLike = await db('likes')
+    .where({ meowtivation_id: meowtivationId, user_id: userId })
+    .first()
+
+  if (existingLike) {
+    //Unlike
+    await db('likes')
+      .where({ meowtivation_id: meowtivationId, user_id: userId })
+      .delete()
+
+    await db('meowtivations')
+      .where({ id: meowtivationId })
+      .decrement('likes_count', 1)
+  } else {
+    //like
+    await db('likes').insert({
+      meowtivation_id: meowtivationId,
+      user_id: userId,
+    })
+
+    await db('meowtivations')
+      .where({ id: meowtivationId })
+      .increment('likes_count', 1)
+  }
+  const updated = await db('meowtivations')
+    .where({ id: meowtivationId })
+    .select('likes_count')
+    .first()
+
+  return updated.likes_count
+}
+
 export async function fetchRandomCatImage(): Promise<ImageSuggestion> {
   const response = await request.get(
     `https://api.thecatapi.com/v1/images/search?api_key=${process.env.CAT_API_KEY}`,
