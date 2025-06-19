@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { useQuery } from '@tanstack/react-query'
 import { getRandomImages } from '@/apis/suggestions'
+import ImageUpload from '@/components/image upload/ImageUpload'
 
 const quotes = [
   { title: 'Nothing selected', text: "You shouldn't be seeting this" },
@@ -96,6 +97,12 @@ export default function Create() {
                 ))
               )}
             </div>
+
+            {/* select from user uploads  */}
+            <ImageUpload
+              selectedImage={selectedImage}
+              setSelectedImage={setSelectedImage}
+            />
 
             {/* Choose Quote */}
 
