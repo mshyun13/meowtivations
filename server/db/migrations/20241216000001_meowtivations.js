@@ -3,7 +3,6 @@ export function up(knex) {
     table.increments('id').primary()
     table.text('image_url').notNullable()
     table.text('quote_text').notNullable()
-    table.string('quote_author')
     table.string('title')
     table
       .integer('user_id')
@@ -11,7 +10,7 @@ export function up(knex) {
       .onDelete('CASCADE')
       .notNullable()
     table.integer('likes_count').defaultTo(0)
-    table.boolean('is_public').defaultTo(true)
+    table.integer('share_count').defaultTo(0)
     table.timestamps(true, true) // Sets default timestamps for created_atand updated_at to now
   })
 }

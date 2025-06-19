@@ -1,5 +1,9 @@
 import connection from '../connection.ts'
 import { Meowtivation, MeowtivationData } from '../../../models/meowtivation.ts'
+import request from 'superagent'
+import { ImageSuggestion } from '../../../models/meowtivation.ts'
+
+import 'dotenv/config'
 
 const db = connection
 
@@ -7,17 +11,16 @@ export async function getRandomMeowtivation(): Promise<
   Meowtivation | undefined
 > {
   const meowtivation = await db('meowtivations')
-    .where('is_public', true)
+    .join('users', 'users.id', 'meowtivations.user_id')
     .orderByRaw('RANDOM()')
     .select(
-      'id',
+      'meowtivations.id',
       'image_url as imageUrl',
       'quote_text as quoteText',
-      'quote_author as quoteAuthor',
+      'users.username as quoteAuthor',
       'title',
       'user_id as userId',
       'likes_count as likesCount',
-      'is_public as isPublic',
       'created_at as createdAt',
       'updated_at as updatedAt',
     )
@@ -45,7 +48,23 @@ export async function createMeowtivation(
   meowtivation: MeowtivationData,
 ): Promise<Meowtivation> {
   // Implement: Create a new meowtivation and return it with generated ID and timestamps
-  throw new Error('Not implemented yet')
+  return db('meowtivations')
+    .insert({
+      image_url: meowtivation.imageUrl,
+      quote_text: meowtivation.quoteText,
+      title: meowtivation.title,
+      user_id: meowtivation.userId,
+    })
+    .returning([
+      'id',
+      'image_url as imageURL',
+      'quote_text as quoteText',
+      'title',
+      'user_id as userId',
+      'likes_count as likesCount',
+      'created_at as createdAt',
+      'updated_at as updatedAt',
+    ])
 }
 
 // TODO:
@@ -65,36 +84,50 @@ export async function deleteMeowtivation(id: number): Promise<boolean> {
 
 export async function toggleLike(
   meowtivationId: number,
-  userId: number
+  userId: number,
 ): Promise<number> {
   const existingLike = await db('likes')
-  .where({ meowtivation_id: meowtivationId, user_id: userId })
-  .first()
+    .where({ meowtivation_id: meowtivationId, user_id: userId })
+    .first()
 
   if (existingLike) {
     //Unlike
     await db('likes')
-    .where({ meowtivation_id: meowtivationId, user_id: userId })
-    .delete()
+      .where({ meowtivation_id: meowtivationId, user_id: userId })
+      .delete()
 
     await db('meowtivations')
-    .where({ id: meowtivationId })
-    .decrement('likes_count', 1)
+      .where({ id: meowtivationId })
+      .decrement('likes_count', 1)
   } else {
     //like
     await db('likes').insert({
       meowtivation_id: meowtivationId,
       user_id: userId,
     })
-    
+
     await db('meowtivations')
-    .where({ id: meowtivationId })
-    .increment('likes_count', 1)
+      .where({ id: meowtivationId })
+      .increment('likes_count', 1)
   }
   const updated = await db('meowtivations')
-  .where({ id: meowtivationId })
-  .select('likes_count')
-  .first()
+    .where({ id: meowtivationId })
+    .select('likes_count')
+    .first()
 
   return updated.likes_count
+}
+
+export async function fetchRandomCatImage(): Promise<ImageSuggestion> {
+  const response = await request.get(
+    `https://api.thecatapi.com/v1/images/search?api_key=${process.env.CAT_API_KEY}`,
+  )
+  return response.body as ImageSuggestion
+}
+
+export async function fetchFIVECatImages(): Promise<ImageSuggestion> {
+  const response = await request.get(
+    `https://api.thecatapi.com/v1/images/search?limit=5&api_key=${process.env.CAT_API_KEY}`,
+  )
+  return response.body as ImageSuggestion
 }

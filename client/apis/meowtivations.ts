@@ -20,12 +20,23 @@ export async function getMeowtivationById(id: number): Promise<Meowtivation> {
   throw new Error('Not implemented yet')
 }
 
-// TODO: To be implemented
 export async function createMeowtivation(
   meowtivation: MeowtivationData,
 ): Promise<Meowtivation> {
-  // Implement: POST to /meowtivations endpoint
-  throw new Error('Not implemented yet')
+  try {
+    const response = await request
+      .post(`${rootUrl}/meowtivations`)
+      .send(meowtivation)
+    return response.body as Meowtivation
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Failed to create meowtivation:', error.message)
+      throw error
+    } else {
+      console.error('Unknown error creating meowtivation')
+      throw new Error('Unknown error occurred')
+    }
+  }
 }
 
 // TODO: To be implemented
