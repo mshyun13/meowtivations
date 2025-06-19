@@ -3,10 +3,11 @@ import Card from '../components/Card'
 import { Meowtivation } from '@models/meowtivation'
 import { useEffect, useState } from 'react'
 import { getAllMeowtivations } from '@/apis/meowtivations'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 export default function Gallery() {
   const [meowtivations, setMeowtivations] = useState<Meowtivation[]>([])
-  const [sort, setSort] = useState<'recentSortSort' | 'popular' | 'randomSort'>(
+  const [sort, setSort] = useState<'recentSort' | 'popularSort' | 'randomSort'>(
     'recentSortSort',
   )
   const [loading, setLoading] = useState(false)
@@ -26,24 +27,45 @@ export default function Gallery() {
     fetchData()
   }, [sort])
 
-  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSort(e.target.value as 'recentSort' | 'popular' | 'randomSort')
-  }
+  // const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  //   setSort(e.target.value as 'recentSort' | 'popularSort' | 'randomSort')
+  // }
 
   return (
     <div>
       <PageTitle title="Meowtivation Gallery" />
 
       <div className="text-center p-8">
-        <select
-          value={sort}
-          onChange={handleSortChange}
-          className="mb-6 p-2 rounded border shadow"
-        >
-          <option value="recentSort">Recent</option>
-          <option value="popularSort">Popular</option>
-          <option value="randomSort">Random</option>
-        </select>
+        <div className="flex items-center pb-4 mb-4 justify-center space-x-4">
+          <span>Order by:</span>
+          <Tabs
+            value={sort}
+            onValueChange={(value: string) =>
+              setSort(value as 'recentSort' | 'popularSort' | 'randomSort')
+            }
+          >
+            <TabsList>
+              <TabsTrigger
+                value="recentSort"
+                className="[&[data-state=active]]:text-primary [&[data-state=active]]:border-primary"
+              >
+                Recent
+              </TabsTrigger>
+              <TabsTrigger
+                value="popularSort"
+                className="[&[data-state=active]]:text-primary [&[data-state=active]]:border-primary"
+              >
+                Popular
+              </TabsTrigger>
+              <TabsTrigger
+                value="randomSort"
+                className="[&[data-state=active]]:text-primary [&[data-state=active]]:border-primary"
+              >
+                Random
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
         {/* Gallery Grid */}
         {loading ? (
           <p>Loading...</p>
@@ -52,10 +74,7 @@ export default function Gallery() {
         ) : (
           <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
             {meowtivations.map((m) => (
-              <Card
-                key={m.id ?? `${m.userId}-${m.createdAt}`}
-                meowtivation={m}
-              />
+              <Card key={m.id} meowtivation={m} />
             ))}
           </div>
         )}
