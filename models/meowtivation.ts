@@ -5,7 +5,7 @@ export interface MeowtivationData {
   quoteAuthor?: string
   title: string
   userId: number
-  isPublic: boolean
+  isPublic?: boolean
 }
 
 export interface Meowtivation extends MeowtivationData {
