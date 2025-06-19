@@ -5,9 +5,7 @@ import * as db from '../db/functions/meowtivations.ts'
 import { Meowtivation } from '@models/meowtivation.ts'
 
 const router = express.Router()
-function getRandomInt(max) {
-  return Math.floor(Math.random() * max)
-}
+
 // GET /api/v1/meowtivations/random
 router.get('/random', async (req, res) => {
   try {
@@ -31,15 +29,15 @@ router.get('/random', async (req, res) => {
 router.get('/:filter?', async (req, res) => {
   try {
     const filter = req.params.filter
-    let meowtivations: Meowtivation[] = []]
-    if (filter === 'popular') {
+    let meowtivations: Meowtivation[] = []
+    if (filter === 'popularSort') {
       meowtivations = await db.getAllMeowtivations('popular')
-    } else if (filter === 'random') {
+    } else if (filter === 'randomSort') {
       meowtivations = await db.getAllMeowtivations('random')
     } else {
       meowtivations = await db.getAllMeowtivations('recent')
     }
-    res.status(200).json(meowtivations)
+    res.status(200).json({ meowtivations })
   } catch (error) {
     console.error('Could not grab all meowtivations. ' + error)
     res.status(500)

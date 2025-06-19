@@ -6,7 +6,9 @@ import { getAllMeowtivations } from '@/apis/meowtivations'
 
 export default function Gallery() {
   const [meowtivations, setMeowtivations] = useState<Meowtivation[]>([])
-  const [sort, setSort] = useState<'recent' | 'popular' | 'random'>('recent')
+  const [sort, setSort] = useState<'recentSortSort' | 'popular' | 'randomSort'>(
+    'recentSortSort',
+  )
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -25,7 +27,7 @@ export default function Gallery() {
   }, [sort])
 
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSort(e.target.value as 'recent' | 'popular' | 'random')
+    setSort(e.target.value as 'recentSort' | 'popular' | 'randomSort')
   }
 
   return (
@@ -38,9 +40,9 @@ export default function Gallery() {
           onChange={handleSortChange}
           className="mb-6 p-2 rounded border shadow"
         >
-          <option value="recent">Recent</option>
-          <option value="popular">Popular</option>
-          <option value="random">Random</option>
+          <option value="recentSort">Recent</option>
+          <option value="popularSort">Popular</option>
+          <option value="randomSort">Random</option>
         </select>
         {/* Gallery Grid */}
         {loading ? (

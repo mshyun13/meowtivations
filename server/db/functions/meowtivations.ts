@@ -11,17 +11,14 @@ export async function getRandomMeowtivation(): Promise<
   Meowtivation | undefined
 > {
   const meowtivation = await db('meowtivations')
-    .where('is_public', true)
     .orderByRaw('RANDOM()')
     .select(
       'id',
       'image_url as imageUrl',
       'quote_text as quoteText',
-      'quote_author as quoteAuthor',
       'title',
       'user_id as userId',
       'likes_count as likesCount',
-      'is_public as isPublic',
       'created_at as createdAt',
       'updated_at as updatedAt',
     )
@@ -32,11 +29,11 @@ export async function getRandomMeowtivation(): Promise<
 
 export async function getAllMeowtivations(sort?: string) {
   if (sort === 'popular') {
-    return db('meowtivations').orderBy('likes_count')
+    return db('meowtivations').orderBy('likes_count', 'desc').select()
   } else if (sort === 'random') {
-    return db('meowtivations').orderByRaw('RANDOM()')
+    return db('meowtivations').orderByRaw('RANDOM()').select()
   } else {
-    return db('meowtivations').orderBy('created_at')
+    return db('meowtivations').orderBy('created_at', 'desc').select()
   }
 }
 

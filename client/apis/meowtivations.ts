@@ -8,9 +8,9 @@ export async function getRandomMeowtivation(): Promise<Meowtivation> {
 }
 
 export async function getAllMeowtivations(
-  sort: 'recent' | 'popular' | 'random' = 'recent',
+  sort: 'recent' | 'popularSort' | 'randomSort' = 'recent',
 ): Promise<Meowtivation[]> {
-  const res = await request.get(`${rootUrl}/meowtivations`).query({ sort })
+  const res = await request.get(`${rootUrl}/meowtivations/${sort}`)
   return res.body.meowtivations
 }
 
