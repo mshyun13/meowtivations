@@ -7,7 +7,6 @@ export async function getRandomMeowtivation(): Promise<
   Meowtivation | undefined
 > {
   const meowtivation = await db('meowtivations')
-    .where('is_public', true)
     .orderByRaw('RANDOM()')
     .select(
       'id',
@@ -36,8 +35,23 @@ export async function getAllMeowtivations(): Promise<Meowtivation[]> {
 export async function getMeowtivationById(
   id: number,
 ): Promise<Meowtivation | undefined> {
-  // Implement: Get a specific meowtivation by ID
-  throw new Error('Not implemented yet')
+  const meowtivation = await db('meowtivations')
+    .where('id', id)
+    .orderByRaw('RANDOM()')
+    .select(
+      'id',
+      'image_url as imageUrl',
+      'quote_text as quoteText',
+      'quote_author as quoteAuthor',
+      'title',
+      'user_id as userId',
+      'likes_count as likesCount',
+      'is_public as isPublic',
+      'created_at as createdAt',
+      'updated_at as updatedAt',
+    )
+    .first()
+  return meowtivation
 }
 
 // TODO:
@@ -65,33 +79,27 @@ export async function deleteMeowtivation(id: number): Promise<boolean> {
 
 export async function getCommentsByMeowtivationId(
   id: number,
-): Promise<Comment[]| undefined> {
+): Promise<Comment[] | undefined> {
   const comments = await db('comments')
     .where('meowtivation_id', id)
-    
+
     .select(
       'id',
       'meowtivation_id as meowtivationId',
       'user_id as userId',
       'comment',
-      
+
       'created_at as createdAt',
       'updated_at as updatedAt',
     )
-  
 
-  return comments 
+  return comments
 }
 
-export async function addComment(
-  comment: number,
-) {
+export async function addComment(comment: number) {
   const [newComment] = await db('comments')
     .insert(comment)
-    .returning(['id', 'meowtivationId', 'userId', 'comment' ])
-  
+    .returning(['id', 'meowtivationId', 'userId', 'comment'])
 
-  return newComment 
+  return newComment
 }
-
-

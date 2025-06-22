@@ -1,7 +1,7 @@
 import { Button } from '@/components/Button'
 import PageTitle from '@/components/PageTitle'
 import Card from '@/components/Card'
-import useRandomMeowtivation from '@/hooks/use-random-meowtivation'
+import { useRandomMeowtivation } from '@/hooks/use-meowtivation'
 import { useNavigate } from 'react-router'
 
 function RandomMeowtivation() {
@@ -28,14 +28,12 @@ function RandomMeowtivation() {
     <>
       <PageTitle title="Random Meowtivation" />
       {/* Card component */}
-      <div className='flex justify-center'>
-      <Card meowtivation={meowtivation} onClick={handleViewDetails} />
+      <div className="flex justify-center">
+        <Card meowtivation={meowtivation} onClick={handleViewDetails} />
       </div>
       {/* refresh button */}
-      <div className='flex gap-4 justify-center mt-6'>
-        <Button onClick={handleGetAnother} >
-          Get Another
-        </Button>
+      <div className="flex gap-4 justify-center mt-6">
+        <Button onClick={handleGetAnother}>Get Another</Button>
       </div>
     </>
   )

@@ -81,8 +81,23 @@ router.post('/:id/comments'),
 
 // GET /api/v1/meowtivations/:id - get specific meowtivation
 router.get('/:id', async (req, res) => {
-  // Implement: Get meowtivation by ID with proper error handling
-  res.status(StatusCodes.NOT_IMPLEMENTED).json({ error: 'Not implemented yet' })
+  try {
+    const id = Number(req.params.id)
+    const meowtivation = await db.getMeowtivationById(id)
+
+    if (!meowtivation) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        error: 'No meowtivations found',
+      })
+    }
+
+    res.status(StatusCodes.OK).json(meowtivation)
+  } catch (error) {
+    console.error('Error fetching random meowtivation:', error)
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      error: 'Failed to fetch random meowtivation',
+    })
+  }
 })
 
 // TODO: Students to implement

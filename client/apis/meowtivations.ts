@@ -16,8 +16,8 @@ export async function getAllMeowtivations(): Promise<Meowtivation[]> {
 
 // TODO: To be implemented
 export async function getMeowtivationById(id: number): Promise<Meowtivation> {
-  // Implement: Get specific meowtivation from /meowtivations/:id endpoint
-  throw new Error('Not implemented yet')
+  const response = await request.get(`${rootUrl}/meowtivations/${id}`)
+  return response.body as Meowtivation
 }
 
 // TODO: To be implemented
