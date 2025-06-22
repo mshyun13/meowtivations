@@ -1,6 +1,5 @@
 import request from 'superagent'
 import { Meowtivation, MeowtivationData } from '../../models/meowtivation.ts'
-
 const rootUrl = new URL('/api/v1', document.baseURI)
 
 export async function getRandomMeowtivation(): Promise<Meowtivation> {
@@ -8,10 +7,11 @@ export async function getRandomMeowtivation(): Promise<Meowtivation> {
   return response.body as Meowtivation
 }
 
-// TODO: To be implemented
-export async function getAllMeowtivations(): Promise<Meowtivation[]> {
-  // Implement: Get all meowtivations from /meowtivations endpoint
-  throw new Error('Not implemented yet')
+export async function getAllMeowtivations(
+  sort: 'recent' | 'popularSort' | 'randomSort' = 'recent',
+): Promise<Meowtivation[]> {
+  const res = await request.get(`${rootUrl}/meowtivations/${sort}`)
+  return res.body.meowtivations
 }
 
 // TODO: To be implemented

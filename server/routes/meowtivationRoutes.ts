@@ -2,6 +2,7 @@ import express from 'express'
 import { StatusCodes } from 'http-status-codes'
 
 import * as db from '../db/functions/meowtivations.ts'
+import { Meowtivation } from '@models/meowtivation.ts'
 
 const router = express.Router()
 
@@ -61,11 +62,22 @@ router.get('/quotes/random', async (req, res) => {
   }
 })
 
-// TODO: Students to implement
-// GET /api/v1/meowtivations - get all meowtivations
-router.get('/', async (req, res) => {
-  // Implement: Get all public meowtivations with pagination
-  res.status(StatusCodes.NOT_IMPLEMENTED).json({ error: 'Not implemented yet' })
+router.get('/:filter?', async (req, res) => {
+  try {
+    const filter = req.params.filter
+    let meowtivations: Meowtivation[] = []
+    if (filter === 'popularSort') {
+      meowtivations = await db.getAllMeowtivations('popular')
+    } else if (filter === 'randomSort') {
+      meowtivations = await db.getAllMeowtivations('random')
+    } else {
+      meowtivations = await db.getAllMeowtivations('recent')
+    }
+    res.status(200).json({ meowtivations })
+  } catch (error) {
+    console.error('Could not grab all meowtivations. ' + error)
+    res.status(500)
+  }
 })
 
 // TODO: Students to implement

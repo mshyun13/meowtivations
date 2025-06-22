@@ -1,5 +1,5 @@
 import connection from '../connection.ts'
-import { Meowtivation, MeowtivationData} from '../../../models/meowtivation.ts'
+import { Meowtivation, MeowtivationData } from '../../../models/meowtivation.ts'
 import request from 'superagent'
 import { ImageSuggestion } from '../../../models/meowtivation.ts'
 import { GoogleGenAI, Type } from '@google/genai'
@@ -30,10 +30,47 @@ export async function getRandomMeowtivation(): Promise<
   return meowtivation as Meowtivation | undefined
 }
 
-// TODO:
-export async function getAllMeowtivations(): Promise<Meowtivation[]> {
-  // Implement: Get all public meowtivations, ordered by created_at DESC
-  throw new Error('Not implemented yet')
+export async function getAllMeowtivations(sort?: string) {
+  if (sort === 'popular') {
+    return db('meowtivations')
+      .orderBy('likes_count', 'desc')
+      .select(
+        'id',
+        'image_url as imageUrl',
+        'quote_text as quoteText',
+        'title',
+        'user_id as userId',
+        'likes_count as likesCount',
+        'created_at as createdAt',
+        'updated_at as updatedAt',
+      )
+  } else if (sort === 'random') {
+    return db('meowtivations')
+      .orderByRaw('RANDOM()')
+      .select(
+        'id',
+        'image_url as imageUrl',
+        'quote_text as quoteText',
+        'title',
+        'user_id as userId',
+        'likes_count as likesCount',
+        'created_at as createdAt',
+        'updated_at as updatedAt',
+      )
+  } else {
+    return db('meowtivations')
+      .orderBy('created_at', 'desc')
+      .select(
+        'id',
+        'image_url as imageUrl',
+        'quote_text as quoteText',
+        'title',
+        'user_id as userId',
+        'likes_count as likesCount',
+        'created_at as createdAt',
+        'updated_at as updatedAt',
+      )
+  }
 }
 
 // TODO:
@@ -44,11 +81,9 @@ export async function getMeowtivationById(
   throw new Error('Not implemented yet')
 }
 
-// TODO:
 export async function createMeowtivation(
   meowtivation: MeowtivationData,
 ): Promise<Meowtivation> {
-  // Implement: Create a new meowtivation and return it with generated ID and timestamps
   return db('meowtivations')
     .insert({
       image_url: meowtivation.imageUrl,
