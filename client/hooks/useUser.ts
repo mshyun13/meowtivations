@@ -3,12 +3,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import * as API from '../apis/users'
 import { useAuth0 } from '@auth0/auth0-react'
-import { useEffect } from 'react'
-import { useNavigate } from 'react-router'
 
 export function useUser() {
   const { user, getAccessTokenSilently } = useAuth0()
-  const navigate = useNavigate()
 
   const query = useQuery({
     queryKey: ['user'],
@@ -20,12 +17,6 @@ export function useUser() {
     refetchOnWindowFocus: false,
     retry: false,
   })
-
-  useEffect(() => {
-    if (query.data) {
-      navigate('/')
-    }
-  }, [query.data, navigate])
 
   return {
     ...query,

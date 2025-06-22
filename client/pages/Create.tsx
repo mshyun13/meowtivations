@@ -6,6 +6,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { useQuery } from '@tanstack/react-query'
 import { getRandomImages, getRandomQuotes } from '@/apis/suggestions'
 import ImageUpload from '@/components/image upload/ImageUpload'
+import { useUser } from '@/hooks/useUser'
 
 export default function Create() {
   const [selectedImage, setSelectedImage] = useState('')
