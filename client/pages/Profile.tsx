@@ -13,7 +13,10 @@ export default function Profile() {
           <p>This page will display a gallery of all my meowtivations.</p>
 
           <div className="translate-y-20">
-            <ImageUpload />
+            <ImageUpload
+              selectedImage={undefined}
+              setSelectedImage={undefined}
+            />
           </div>
         </div>
       </div>

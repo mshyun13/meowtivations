@@ -17,7 +17,12 @@ import {
 } from 'swiper/modules'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
-export default function ImageUpload() {
+interface Prop {
+  selectedImage: string
+  setSelectedImage: (image_url: string) => void
+}
+
+export default function ImageUpload({ selectedImage, setSelectedImage }: Prop) {
   const [preview, setPreview] = useState<null | string>(null)
   const [file, setFile] = useState<File | null>(null)
   const mutation = useUploadImage()
@@ -75,13 +80,18 @@ export default function ImageUpload() {
           mousewheel={true}
           className="relative w-[600px] h-64 rounded"
         >
-          {images.reverse().map((image) => (
+          {[...images].reverse().map((image) => (
             <SwiperSlide key={image.id}>
-              <img
-                src={image.image_url}
-                alt={`User's upload ${image.id}`}
-                className="object-contain w-full h-full rounded -translate-y-8"
-              />
+              <button
+                type="button"
+                onClick={() => setSelectedImage(image.image_url)}
+              >
+                <img
+                  src={image.image_url}
+                  alt={`User's upload ${image.id}`}
+                  className={`object-contain w-full h-full rounded border-8 ${selectedImage === image.image_url ? 'border-primary' : 'border-border'}`}
+                />
+              </button>
             </SwiperSlide>
           ))}
         </Swiper>
