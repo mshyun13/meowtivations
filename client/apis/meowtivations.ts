@@ -10,14 +10,14 @@ export async function getRandomMeowtivation(): Promise<Meowtivation> {
 export async function getAllMeowtivations(
   sort: 'recent' | 'popularSort' | 'randomSort' = 'recent',
 ): Promise<Meowtivation[]> {
-  const res = await request.get(`${rootUrl}/meowtivations/${sort}`)
+  const res = await request.get(`${rootUrl}/meowtivations/filter/${sort}`)
   return res.body.meowtivations
 }
 
 // TODO: To be implemented
 export async function getMeowtivationById(id: number): Promise<Meowtivation> {
-  // Implement: Get specific meowtivation from /meowtivations/:id endpoint
-  throw new Error('Not implemented yet')
+  const response = await request.get(`${rootUrl}/meowtivations/${id}`)
+  return response.body as Meowtivation
 }
 
 export async function createMeowtivation(

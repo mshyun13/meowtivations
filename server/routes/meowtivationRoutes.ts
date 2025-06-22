@@ -62,7 +62,7 @@ router.get('/quotes/random', async (req, res) => {
   }
 })
 
-router.get('/:filter?', async (req, res) => {
+router.get('/filter/:filter?', async (req, res) => {
   try {
     const filter = req.params.filter
     let meowtivations: Meowtivation[] = []
@@ -80,11 +80,72 @@ router.get('/:filter?', async (req, res) => {
   }
 })
 
-// TODO: Students to implement
+// GET /api/v1/meowtivations/:id/comments - get specific meowtivation
+router.get('/:id/comments', async (req, res) => {
+  try {
+    const id = Number(req.params.id) // can't convert 'a' to a number but we can convert '1' to 1
+    const comments = await db.getCommentsByMeowtivationId(id)
+    if (!comments) {
+      res.status(400)
+      return
+    }
+
+    // ...
+    res.status(200).json(comments)
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message)
+    } else {
+      console.error('unknown error')
+    }
+    res.status(500).json({
+      error: `Something went wrong.`,
+    })
+  }
+})
+
+// POST /api/v1/meowtivations/:id/comments - post new comments
+
+router.post('/:id/comments'),
+  async (req, res) => {
+    try {
+      const id = Number(req.params.id)
+      const { userId, comment } = req.body
+
+      const newComment = { meowtivationId: id, userId, comment }
+      const savedComment = await db.addComment(newComment)
+      res.status(201).json(savedComment)
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.message)
+      } else {
+        console.error('unknown error')
+      }
+      res.status(500).json({
+        error: `Something went wrong.`,
+      })
+    }
+  }
+
 // GET /api/v1/meowtivations/:id - get specific meowtivation
 router.get('/:id', async (req, res) => {
-  // Implement: Get meowtivation by ID with proper error handling
-  res.status(StatusCodes.NOT_IMPLEMENTED).json({ error: 'Not implemented yet' })
+  try {
+    const id = Number(req.params.id)
+    const meowtivation = await db.getMeowtivationById(id)
+
+    if (!meowtivation) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        error: 'No meowtivations found',
+      })
+    }
+
+    res.status(StatusCodes.OK).json(meowtivation)
+  } catch (error) {
+    console.error('Error fetching random meowtivation:', error)
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      error: 'Failed to fetch random meowtivation',
+    })
+  }
 })
 
 router.post('/', async (req, res) => {

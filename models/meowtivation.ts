@@ -25,6 +25,7 @@ export interface CommentData {
 export interface Comment extends CommentData {
   id: number
   createdAt: string
+  updatedAt: string
 }
 
 // AI-generated quote suggestions

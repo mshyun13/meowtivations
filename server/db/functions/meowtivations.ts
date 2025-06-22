@@ -77,8 +77,23 @@ export async function getAllMeowtivations(sort?: string) {
 export async function getMeowtivationById(
   id: number,
 ): Promise<Meowtivation | undefined> {
-  // Implement: Get a specific meowtivation by ID
-  throw new Error('Not implemented yet')
+  const meowtivation = await db('meowtivations')
+    .join('users', 'users.id', 'meowtivations.user_id')
+    .where('meowtivations.id', id)
+    .orderByRaw('RANDOM()')
+    .select(
+      'meowtivations.id',
+      'image_url as imageUrl',
+      'quote_text as quoteText',
+      'users.username as quoteAuthor',
+      'title',
+      'user_id as userId',
+      'likes_count as likesCount',
+      'created_at as createdAt',
+      'updated_at as updatedAt',
+    )
+    .first()
+  return meowtivation
 }
 
 export async function createMeowtivation(
@@ -194,4 +209,31 @@ export async function geminiQuote(): Promise<string | unknown> {
     },
   })
   return response.text
+}
+
+export async function getCommentsByMeowtivationId(
+  id: number,
+): Promise<Comment[] | undefined> {
+  const comments = await db('comments')
+    .where('meowtivation_id', id)
+
+    .select(
+      'id',
+      'meowtivation_id as meowtivationId',
+      'user_id as userId',
+      'comment',
+
+      'created_at as createdAt',
+      'updated_at as updatedAt',
+    )
+
+  return comments
+}
+
+export async function addComment(comment: number) {
+  const [newComment] = await db('comments')
+    .insert(comment)
+    .returning(['id', 'meowtivationId', 'userId', 'comment'])
+
+  return newComment
 }
