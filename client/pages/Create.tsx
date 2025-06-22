@@ -1,28 +1,30 @@
 import PageTitle from '@/components/PageTitle'
 import { useCreateMeowtivation } from '@/hooks/useCreateMeowtivation'
-import { MeowtivationData } from '@models/meowtivation.ts'
+import { MeowtivationData, QuoteSuggestion } from '@models/meowtivation.ts'
 import { useState } from 'react'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-
-const images = ['1', '2', '3', '4', '5']
-
-const quotes = [
-  { title: 'Nothing selected', text: "You shouldn't be seeting this" },
-  { title: 'Nothing selected 2', text: "You shouldn't be seeting this 2" },
-  { title: 'Nothing selected 3', text: "You shouldn't be seeting this 3" },
-  { title: 'Nothing selected 4', text: "You shouldn't be seeting this 4" },
-  { title: 'Nothing selected 5', text: "You shouldn't be seeting this 5" },
-]
-
-interface Quote {
-  title: string
-  text: string
-}
+import { useQuery } from '@tanstack/react-query'
+import { getRandomImages, getRandomQuotes } from '@/apis/suggestions'
+import ImageUpload from '@/components/image upload/ImageUpload'
 
 export default function Create() {
   const [selectedImage, setSelectedImage] = useState('')
-  const [selectedQuote, setSelectedQuote] = useState<Quote | null>(null)
+  const [selectedQuote, setSelectedQuote] = useState<QuoteSuggestion | null>(
+    null,
+  )
   const [error, setError] = useState('')
+
+  const { data: images, ...imageSuggestions } = useQuery({
+    queryKey: ['imageSuggestions'],
+    queryFn: getRandomImages,
+    refetchOnWindowFocus: false,
+  })
+
+  const { data: quotes, ...quoteSuggestions } = useQuery({
+    queryKey: ['quoteSuggestions'],
+    queryFn: getRandomQuotes,
+    refetchOnWindowFocus: false,
+  })
 
   const mutation = useCreateMeowtivation()
 
@@ -44,6 +46,16 @@ export default function Create() {
     setSelectedImage('')
     setSelectedQuote(null)
     setError('')
+    imageSuggestions.refetch()
+    quoteSuggestions.refetch()
+  }
+
+  if (imageSuggestions.error) {
+    return <>Unable to load images</>
+  }
+
+  if (quoteSuggestions.error) {
+    return <>Unable to load images</>
   }
 
   return (
@@ -61,25 +73,37 @@ export default function Create() {
               </div>
             )}
             {/* Choose Image */}
+
             <div>
               <h2 className="mb-4 mt-2 font-title text-4xl font-bold tracking-wide text-primary text-left">
                 Choose image
               </h2>
-              {images.map((cat) => (
-                <button
-                  key={cat}
-                  type="button"
-                  onClick={() => setSelectedImage(cat)}
-                  className={`border-4 rounded m-1 ${selectedImage === cat ? 'border-primary' : 'border-border'}`}
-                >
-                  <img
-                    src={cat}
-                    alt={`funny cat haha ${cat}`}
-                    className="h-32 w-auto"
-                  />
-                </button>
-              ))}
+              {imageSuggestions.isPending || !images ? (
+                <p>loading...</p>
+              ) : (
+                images.map((cat) => (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => setSelectedImage(cat.url)}
+                    className={`border-4 rounded m-1 ${selectedImage === cat.url ? 'border-primary' : 'border-border'}`}
+                  >
+                    <img
+                      src={cat.url}
+                      alt={`funny cat haha ${cat}`}
+                      className="h-32 w-auto"
+                    />
+                  </button>
+                ))
+              )}
             </div>
+
+            {/* select from user uploads  */}
+            <ImageUpload
+              selectedImage={selectedImage}
+              setSelectedImage={setSelectedImage}
+            />
+
             {/* Choose Quote */}
 
             <div>
@@ -87,19 +111,23 @@ export default function Create() {
                 Choose quote
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {quotes.map((quote) => (
-                  <button
-                    key={quote.title}
-                    type="button"
-                    onClick={() => setSelectedQuote(quote)}
-                    className={`border-4 rounded p-2 m-1 w-full text-left ${selectedQuote?.title === quote.title ? 'border-primary' : 'border-border'}`}
-                  >
-                    <p className="font-semibold">{quote.title}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {quote.text}
-                    </p>
-                  </button>
-                ))}
+                {quoteSuggestions.isPending || !quotes ? (
+                  <p>loading...</p>
+                ) : (
+                  quotes.map((quote) => (
+                    <button
+                      key={quote.title}
+                      type="button"
+                      onClick={() => setSelectedQuote(quote)}
+                      className={`border-4 rounded p-2 m-1 w-full text-left ${selectedQuote?.title === quote.title ? 'border-primary' : 'border-border'}`}
+                    >
+                      <p className="font-semibold">{quote.title}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {quote.text}
+                      </p>
+                    </button>
+                  ))
+                )}
               </div>
             </div>
             {/* Submit Button */}
