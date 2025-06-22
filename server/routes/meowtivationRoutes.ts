@@ -1,10 +1,7 @@
 import express from 'express'
 import { StatusCodes } from 'http-status-codes'
 
-import request from 'superagent'
-
 import * as db from '../db/functions/meowtivations.ts'
-import { ImageSuggestion } from '@models/meowtivation.ts'
 
 const router = express.Router()
 
@@ -53,6 +50,17 @@ router.get('/images/random', async (req, res) => {
   }
 })
 
+//GET /api/v1/meowtivations/quotes/random - get random ai quote
+router.get('/quotes/random', async (req, res) => {
+  try {
+    const result = await db.geminiQuote()
+    res.json(JSON.parse(result as string))
+  } catch (error) {
+    console.error('Could not create ai call', error)
+    res.status(500).json({ error: 'Internal server error' })
+  }
+})
+
 // TODO: Students to implement
 // GET /api/v1/meowtivations - get all meowtivations
 router.get('/', async (req, res) => {
@@ -88,7 +96,9 @@ router.patch('/:id/like', async (req, res) => {
   const meowtivationId = Number(req.params.id)
 
   if (isNaN(meowtivationId)) {
-    return res.status(StatusCodes.BAD_REQUEST).json({ error: 'Invalid meowtivation ID' })
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ error: 'Invalid meowtivation ID' })
   }
   try {
     const userId = 1 // Temporary hardcoded user ID
@@ -96,7 +106,9 @@ router.patch('/:id/like', async (req, res) => {
     res.status(StatusCodes.OK).json({ likesCount: updatedLikes })
   } catch (error) {
     console.error('Error toggling like:', error)
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Failed to toggle like' })
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ error: 'Failed to toggle like' })
   }
 })
 

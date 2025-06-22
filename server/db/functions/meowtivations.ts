@@ -1,7 +1,8 @@
 import connection from '../connection.ts'
-import { Meowtivation, MeowtivationData } from '../../../models/meowtivation.ts'
+import { Meowtivation, MeowtivationData} from '../../../models/meowtivation.ts'
 import request from 'superagent'
 import { ImageSuggestion } from '../../../models/meowtivation.ts'
+import { GoogleGenAI, Type } from '@google/genai'
 
 import 'dotenv/config'
 
@@ -130,4 +131,32 @@ export async function fetchFIVECatImages(): Promise<ImageSuggestion> {
     `https://api.thecatapi.com/v1/images/search?limit=5&api_key=${process.env.CAT_API_KEY}`,
   )
   return response.body as ImageSuggestion
+}
+
+export async function geminiQuote(): Promise<string | unknown> {
+  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY })
+
+  const response = await ai.models.generateContent({
+    model: 'gemini-2.5-flash',
+    contents:
+      "Give me an inspiring quote about either success, dreams, determination, growth, or wisdom and include the author's name and give it a title that relates to it.",
+    config: {
+      responseMimeType: 'application/json',
+      responseSchema: {
+        type: Type.ARRAY,
+        items: {
+          type: Type.OBJECT,
+          properties: {
+            title: { type: Type.STRING },
+            text: { type: Type.STRING },
+            author: { type: Type.STRING },
+          },
+          propertyOrdering: ['title', 'text', 'author'],
+        },
+        minItems: 5,
+        maxItems: 5,
+      },
+    },
+  })
+  return response.text
 }
