@@ -2,6 +2,7 @@ import connection from '../connection.ts'
 import { Meowtivation, MeowtivationData } from '../../../models/meowtivation.ts'
 import request from 'superagent'
 import { ImageSuggestion } from '../../../models/meowtivation.ts'
+import { GoogleGenAI, Type } from '@google/genai'
 
 import 'dotenv/config'
 
@@ -29,25 +30,75 @@ export async function getRandomMeowtivation(): Promise<
   return meowtivation as Meowtivation | undefined
 }
 
-// TODO:
-export async function getAllMeowtivations(): Promise<Meowtivation[]> {
-  // Implement: Get all public meowtivations, ordered by created_at DESC
-  throw new Error('Not implemented yet')
+export async function getAllMeowtivations(sort?: string) {
+  if (sort === 'popular') {
+    return db('meowtivations')
+      .orderBy('likes_count', 'desc')
+      .select(
+        'id',
+        'image_url as imageUrl',
+        'quote_text as quoteText',
+        'title',
+        'user_id as userId',
+        'likes_count as likesCount',
+        'created_at as createdAt',
+        'updated_at as updatedAt',
+      )
+  } else if (sort === 'random') {
+    return db('meowtivations')
+      .orderByRaw('RANDOM()')
+      .select(
+        'id',
+        'image_url as imageUrl',
+        'quote_text as quoteText',
+        'title',
+        'user_id as userId',
+        'likes_count as likesCount',
+        'created_at as createdAt',
+        'updated_at as updatedAt',
+      )
+  } else {
+    return db('meowtivations')
+      .orderBy('created_at', 'desc')
+      .select(
+        'id',
+        'image_url as imageUrl',
+        'quote_text as quoteText',
+        'title',
+        'user_id as userId',
+        'likes_count as likesCount',
+        'created_at as createdAt',
+        'updated_at as updatedAt',
+      )
+  }
 }
 
 // TODO:
 export async function getMeowtivationById(
   id: number,
 ): Promise<Meowtivation | undefined> {
-  // Implement: Get a specific meowtivation by ID
-  throw new Error('Not implemented yet')
+  const meowtivation = await db('meowtivations')
+    .join('users', 'users.id', 'meowtivations.user_id')
+    .where('meowtivations.id', id)
+    .orderByRaw('RANDOM()')
+    .select(
+      'meowtivations.id',
+      'image_url as imageUrl',
+      'quote_text as quoteText',
+      'users.username as quoteAuthor',
+      'title',
+      'user_id as userId',
+      'likes_count as likesCount',
+      'created_at as createdAt',
+      'updated_at as updatedAt',
+    )
+    .first()
+  return meowtivation
 }
 
-// TODO:
 export async function createMeowtivation(
   meowtivation: MeowtivationData,
 ): Promise<Meowtivation> {
-  // Implement: Create a new meowtivation and return it with generated ID and timestamps
   return db('meowtivations')
     .insert({
       image_url: meowtivation.imageUrl,
@@ -130,4 +181,59 @@ export async function fetchFIVECatImages(): Promise<ImageSuggestion> {
     `https://api.thecatapi.com/v1/images/search?limit=5&api_key=${process.env.CAT_API_KEY}`,
   )
   return response.body as ImageSuggestion
+}
+
+export async function geminiQuote(): Promise<string | unknown> {
+  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY })
+
+  const response = await ai.models.generateContent({
+    model: 'gemini-2.5-flash',
+    contents:
+      "Give me an inspiring quote about either success, dreams, determination, growth, or wisdom and include the author's name and give it a title that relates to it.",
+    config: {
+      responseMimeType: 'application/json',
+      responseSchema: {
+        type: Type.ARRAY,
+        items: {
+          type: Type.OBJECT,
+          properties: {
+            title: { type: Type.STRING },
+            text: { type: Type.STRING },
+            author: { type: Type.STRING },
+          },
+          propertyOrdering: ['title', 'text', 'author'],
+        },
+        minItems: 5,
+        maxItems: 5,
+      },
+    },
+  })
+  return response.text
+}
+
+export async function getCommentsByMeowtivationId(
+  id: number,
+): Promise<Comment[] | undefined> {
+  const comments = await db('comments')
+    .where('meowtivation_id', id)
+
+    .select(
+      'id',
+      'meowtivation_id as meowtivationId',
+      'user_id as userId',
+      'comment',
+
+      'created_at as createdAt',
+      'updated_at as updatedAt',
+    )
+
+  return comments
+}
+
+export async function addComment(comment: number) {
+  const [newComment] = await db('comments')
+    .insert(comment)
+    .returning(['id', 'meowtivationId', 'userId', 'comment'])
+
+  return newComment
 }
