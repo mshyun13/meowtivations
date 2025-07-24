@@ -1,3 +1,5 @@
+# Teacher Lead Project from Dev-Academy
+
 # Meowtivation - Pet Profile Directory
 
 A social platform for pet users to create meowtivationals, browse the gallery, and connect with fellow cat enthusiasts.
