@@ -178,189 +178,40 @@ As a user, I want to download meowtivations I like and share them with friends v
 
 ### 🐾 Meowtivations Collection (`/api/v1/meowtivations`)
 
-| Method | Endpoint                | Description                            | Team     |
-|--------|-------------------------|----------------------------------------|----------|
-| GET    | `/`                     | Get meowtivations feed                 | Team 6   |
-| POST   | `/`                     | Create new meowtivation                | Team 2   |
-| GET    | `/:id`                  | Get single meowtivation                | Team 4   |
-| GET    | `/images/random`        | Get random cat image                   | Team 3   |
-| GET    | `/quotes/random`        | Get AI-generated quote                 | Team 3   |
-| PATCH  | `/:id/like`             | Toggle like on a meowtivation          | Team 4   |
-| POST   | `/:id/comments`         | Add a comment                          | Team 6   |
-| GET    | `/:id/comments`         | Get comments for a meowtivation        | Team 6   |
+| Method | Endpoint                | Description                            | 
+|--------|-------------------------|----------------------------------------|
+| GET    | `/`                     | Get meowtivations feed                 |
+| POST   | `/`                     | Create new meowtivation                |
+| GET    | `/:id`                  | Get single meowtivation                |
+| GET    | `/images/random`        | Get random cat image                   |
+| GET    | `/quotes/random`        | Get AI-generated quote                 |
+| PATCH  | `/:id/like`             | Toggle like on a meowtivation          |
+| POST   | `/:id/comments`         | Add a comment                          |
+| GET    | `/:id/comments`         | Get comments for a meowtivation        |
 
 ### 👤 Users Collection (`/api/v1/users`)
 
-| Method | Endpoint                    | Description                             | Team     |
-|--------|-----------------------------|-----------------------------------------|----------|
-| GET    | `/:id/profile`              | Get user profile                        | Team 1   |
-| POST   | `/:id/profile`              | Create or update user profile           | Team 1   |
-| GET    | `/:id/meowtivations`        | Get meowtivations created by user       | Team 1   |
-| GET    | `/:id/likes`                | Get meowtivations liked by user         | Team 1   |
+| Method | Endpoint                    | Description                             |
+|--------|-----------------------------|-----------------------------------------|
+| GET    | `/:id/profile`              | Get user profile                        |
+| POST   | `/:id/profile`              | Create or update user profile           |
+| GET    | `/:id/meowtivations`        | Get meowtivations created by user       |
+| GET    | `/:id/likes`                | Get meowtivations liked by user         |
 
 ### 🔐 Auth Collection (`/api/v1/auth`)
 
-| Method | Endpoint      | Description                     | Team   |
-|--------|---------------|----------------------------------|--------|
-| GET    | `/me`         | Get current authenticated user   | Team 1 |
+| Method | Endpoint      | Description                     |
+|--------|---------------|----------------------------------|
+| GET    | `/me`         | Get current authenticated user   |
 
 ### 📸 Images Collection (`/api/v1/images`)
 
-| Method | Endpoint      | Description               | Team   |
-|--------|---------------|---------------------------|--------|
-| POST   | `/upload`     | Upload custom image       | Team 5 |
+| Method | Endpoint      | Description               |
+|--------|---------------|---------------------------|
+| POST   | `/upload`     | Upload custom image       |
 
 ### 🔗 Share Collection (`/api/v1/share`)
 
-| Method | Endpoint       | Description                        | Team   |
-|--------|----------------|------------------------------------|--------|
-| GET    | `/:slug`       | Get shareable meowtivation by slug | Team 5 |
-
----
-
-## Snippets 🗓️
-
-These are small snippets of code that may help you out. Note that this is not an exhaustive list, and you may need to mix and match concepts.
-
-### Component
-
-#### Fetch from Component
-
-<details>
-  <summary>Code:</summary>
-
-```ts
-// component.tsx
-const { data: fruits, isPending, isError } = useQuery({
-  queryKey: ['fruits'], 
-  queryFn: getFruits
-})
-
-if (isError) {
-  return (/* ... */)
-}
-
-if (isPending) {
-  return (/* ... */)
-}
-
-return (/* ... */)
-```
-
-</details>
-
----
-
-### API Client
-
-#### Get Request
-
-<details>
-  <summary>Code:</summary>
-
-```ts
-const rootUrl = new URL('/api/v1', document.baseURI)
-
-// apis/fruits.ts
-async function getFruits() {
-  const response = await request
-    .get(`${rootUrl}$/fruits`)
-
-  return response.body.fruits as Fruit[]
-}
-```
-
-</details>
-
----
-
-### Hooks
-
-#### Get Request
-
-<details>
-  <summary>Code:</summary>
-
-```ts
-// hooks/use-fruits.ts
-export default function useFruits() {
-  return useQuery({
-    queryKey: ['fruits'],
-    queryFn: getFruits,
-    refetchOnWindowFocus: false,
-    refetchOnMount: true,
-  })
-}
-```
-
-</details>
-
----
-
-### Express Routes
-
-#### Getting Data (server-side)
-
-<details>
-  <summary>Code:</summary>
-
-```ts
-// server/routes/fruits.ts
-router.get('/', (req, res) => {
-  try {
-    const fruits = await db.getFruits(userId)
-    if(!fruits){
-      res.status(400)
-      return
-    }
-
-    // ...
-    res.status(200).json({fruits})
-  } catch (error) {
-    if (error instanceof Error) {
-      console.error(error.message)
-    } else {
-      console.error('unknown error')
-    }
-    res.status(500).json({
-      error: `Something went wrong.`,
-    })
-  }
-})
-```
-
-</details>
-
----
-
-### Database/Knex
-
-#### Database Join
-
-<details>
-  <summary>Code:</summary>
-
-```ts
-// server/db/fuctions/reviews.ts
-async function getFruits() {
-  //         table 1
-  const result =  (
-    db('fruits')
-      //     table 2     column 1     column 2
-      .join('comments', 'fruits.id', 'comments.fruit_id')
-      .select(
-        // make sure column names end up being unique
-        'fruits.id',
-        'fruits.name',
-        'fruits.color',
-        'fruits.taste',
-        'comments.taste_tating as tasteRating',
-        'comments.texture_rating as textureRating',
-        'comments.content'
-      )
-  )
-  return result as FruitWithComment[]
-}
-```
-
-</details>
+| Method | Endpoint       | Description                        |
+|--------|----------------|------------------------------------|
+| GET    | `/:slug`       | Get shareable meowtivation by slug |
