@@ -1,4 +1,4 @@
-# Teacher Lead Project from Dev-Academy
+# Teacher Led Project from Dev-Academy
 
 ## Meowtivation - Pet Profile Directory
 
